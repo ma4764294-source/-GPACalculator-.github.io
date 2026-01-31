@@ -1,8 +1,9 @@
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Medical Lab GPA Calculator</title>
+    <title>Applied Health Sciences Technology - GPA Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -172,7 +173,7 @@
 
         .credits {
             color: #ff0000;
-            font-size: 1rem;
+            font-size: 1.15rem;
             margin-top: 0.5rem;
             font-weight: 700;
             font-family: 'Orbitron', sans-serif;
@@ -644,6 +645,11 @@
             max-height: 80vh;
             overflow-y: auto;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            text-align: center;
+        }
+
+        body[dir="rtl"] .modal-content {
+            text-align: center;
         }
 
         .modal-header {
@@ -651,6 +657,10 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
+        }
+
+        body[dir="rtl"] .modal-header {
+            flex-direction: row-reverse;
         }
 
         .modal-title {
@@ -738,11 +748,27 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             animation: slideIn 0.3s ease-out;
             z-index: 3000;
+            max-width: 400px;
+            white-space: pre-line;
         }
 
         body[dir="rtl"] .notification {
             right: auto;
             left: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .notification {
+                bottom: 1rem;
+                right: 1rem;
+                left: 1rem;
+                max-width: calc(100% - 2rem);
+            }
+
+            body[dir="rtl"] .notification {
+                left: 1rem;
+                right: 1rem;
+            }
         }
 
         @keyframes slideIn {
@@ -757,8 +783,24 @@
         }
 
         @media (max-width: 768px) {
+            body {
+                font-size: 16px; /* Prevent zoom on mobile */
+            }
+
+            .container {
+                padding: 1rem;
+            }
+
             h1 {
-                font-size: 2rem;
+                font-size: 1.8rem;
+            }
+
+            .subtitle {
+                font-size: 1rem;
+            }
+
+            .credits {
+                font-size: 1.05rem;
             }
 
             .courses-grid {
@@ -766,11 +808,92 @@
             }
 
             .stats-panel {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
             }
 
             .language-switcher {
                 top: 5rem;
+                left: 1rem;
+                right: 1rem;
+                max-width: calc(100% - 2rem);
+            }
+
+            body[dir="rtl"] .language-switcher {
+                left: 1rem;
+                right: 1rem;
+            }
+
+            .theme-toggle {
+                top: 1rem;
+                right: 1rem;
+            }
+
+            body[dir="rtl"] .theme-toggle {
+                left: 1rem;
+                right: auto;
+            }
+
+            .smart-import-btn, .reset-btn {
+                width: 100%;
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+            }
+
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .semester-header {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: flex-start;
+            }
+
+            body[dir="rtl"] .semester-header {
+                align-items: flex-start;
+            }
+
+            .semester-title {
+                font-size: 1.1rem;
+            }
+
+            .input-group {
+                flex-direction: column;
+            }
+
+            .marks-input {
+                font-size: 16px; /* Prevent zoom on iOS */
+                padding: 0.9rem;
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 1.5rem;
+            }
+
+            .import-textarea {
+                font-size: 16px; /* Prevent zoom on iOS */
+                min-height: 250px;
+            }
+
+            .results-row {
+                grid-template-columns: 1fr;
+                gap: 0.75rem;
+            }
+
+            .stat-card {
+                padding: 1rem;
+            }
+
+            .stat-value {
+                font-size: 1.8rem;
+            }
+
+            .course-card {
+                padding: 1rem;
             }
         }
     </style>
@@ -792,8 +915,8 @@
 
     <div class="container">
         <header>
-            <h1 data-en="🧪 Medical Lab GPA Calculator" data-ar="🧪 حاسبة المعدل التراكمي للمختبرات الطبية">🧪 Medical Lab GPA Calculator</h1>
-            <div class="subtitle" data-en="Department of Medical Laboratory Program" data-ar="قسم برنامج المختبرات الطبية">Department of Medical Laboratory Program</div>
+            <h1 data-en="🧬 Applied Health Sciences Technology" data-ar="🧬 تكنولوجيا العلوم الصحية التطبيقية">🧬 Applied Health Sciences Technology</h1>
+            <div class="subtitle" data-en="GPA Calculator" data-ar="حاسبة المعدل التراكمي">GPA Calculator</div>
             <div class="credits" data-en="Made by Mohand" data-ar="صنع بواسطة مهند">Made by Mohand</div>
             <div class="button-group">
                 <button class="smart-import-btn" onclick="openSmartImport()" data-en="⚡ Calculate Your GPA with 1 Click" data-ar="⚡ احسب معدلك بضغطة واحدة">⚡ Calculate Your GPA with 1 Click</button>
@@ -1266,34 +1389,42 @@ TL201 - 90"></textarea>
             const text = document.getElementById('importText').value;
             const lines = text.split('\n');
             let importedCount = 0;
+            let notFoundCodes = [];
             
             lines.forEach(line => {
-                // First try to find a course code
+                if (!line.trim()) return; // Skip empty lines
+                
+                // First try to find a course code (case insensitive)
                 const codeMatch = line.match(/\b([A-Z]{2,4}\d{1,4})\b/i);
                 if (!codeMatch) return;
                 
                 const code = codeMatch[1].toUpperCase();
-                if (!courseDatabase[code]) return;
+                if (!courseDatabase[code]) {
+                    if (!notFoundCodes.includes(code)) {
+                        notFoundCodes.push(code);
+                    }
+                    return;
+                }
                 
                 let score = null;
                 
-                // Priority 1: Look for "Written: XX" format
-                const writtenMatch = line.match(/Written:\s*(\d+)/i);
-                if (writtenMatch) {
-                    score = parseFloat(writtenMatch[1]);
+                // Priority 1: Look for "Total: XX" format (most reliable for final marks)
+                const totalMatch = line.match(/Total:\s*(\d+(?:\.\d+)?)/i);
+                if (totalMatch) {
+                    score = parseFloat(totalMatch[1]);
                 }
                 
-                // Priority 2: Look for "Total: XX" format (only if no Written found)
+                // Priority 2: Look for "Written: XX" format
                 if (score === null) {
-                    const totalMatch = line.match(/Total:\s*(\d+)/i);
-                    if (totalMatch) {
-                        score = parseFloat(totalMatch[1]);
+                    const writtenMatch = line.match(/Written:\s*(\d+(?:\.\d+)?)/i);
+                    if (writtenMatch) {
+                        score = parseFloat(writtenMatch[1]);
                     }
                 }
                 
                 // Priority 3: Look for "Practical: XX" format
                 if (score === null) {
-                    const practicalMatch = line.match(/Practical:\s*(\d+)/i);
+                    const practicalMatch = line.match(/Practical:\s*(\d+(?:\.\d+)?)/i);
                     if (practicalMatch) {
                         score = parseFloat(practicalMatch[1]);
                     }
@@ -1301,32 +1432,45 @@ TL201 - 90"></textarea>
                 
                 // Priority 4: Look for "XX/YYY" or "XX / YYY" format (score/total)
                 if (score === null) {
-                    const slashMatch = line.match(/(\d+)\s*\/\s*(\d+)/);
+                    const slashMatch = line.match(/(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/);
                     if (slashMatch) {
                         const num1 = parseFloat(slashMatch[1]);
                         const num2 = parseFloat(slashMatch[2]);
-                        // Use the smaller number (likely the score, not the max)
-                        score = Math.min(num1, num2);
+                        // Use the first number (the score)
+                        score = num1;
+                        // Validate that it's not bigger than the total
+                        if (num2 > 0 && num1 > num2) {
+                            score = Math.min(num1, num2);
+                        }
                     }
                 }
                 
-                // Priority 5: Look for standalone number after course code (avoid Hours:, Credits:, etc.)
+                // Priority 5: Look for standalone number after course code
                 if (score === null) {
                     // Remove common non-score patterns first
-                    const cleanLine = line.replace(/Hours?:\s*\d+/gi, '')
+                    let cleanLine = line.replace(/Hours?:\s*\d+/gi, '')
                                          .replace(/Credits?:\s*\d+/gi, '')
                                          .replace(/Term Work:\s*\d+/gi, '');
                     
-                    // Find numbers after the course code
-                    const afterCode = cleanLine.substring(cleanLine.indexOf(code) + code.length);
-                    const numberMatch = afterCode.match(/(\d+)/);
-                    if (numberMatch) {
-                        score = parseFloat(numberMatch[1]);
+                    // Find the course code position
+                    const codeIndex = cleanLine.toUpperCase().indexOf(code);
+                    if (codeIndex >= 0) {
+                        // Get text after the course code
+                        const afterCode = cleanLine.substring(codeIndex + code.length);
+                        // Look for first number that could be a score
+                        const numberMatch = afterCode.match(/[:\-–—\s]+(\d+(?:\.\d+)?)/);
+                        if (numberMatch) {
+                            const potentialScore = parseFloat(numberMatch[1]);
+                            // Only accept if it's reasonable (not hours, not too high)
+                            if (potentialScore <= courseDatabase[code].maxMarks) {
+                                score = potentialScore;
+                            }
+                        }
                     }
                 }
                 
                 // Save the grade if we found a valid score
-                if (score !== null && score > 0 && score <= courseDatabase[code].maxMarks) {
+                if (score !== null && score >= 0 && score <= courseDatabase[code].maxMarks) {
                     grades[code] = score;
                     importedCount++;
                 }
@@ -1337,16 +1481,35 @@ TL201 - 90"></textarea>
                 renderSemesters();
                 calculateCumulativeGPA();
                 calculateSemesterGPAs();
-                const successMsg = currentLang === 'en' 
-                    ? `✅ Successfully imported ${importedCount} grades!`
+                
+                let successMsg = currentLang === 'en' 
+                    ? `✅ Successfully imported ${importedCount} grade${importedCount > 1 ? 's' : ''}!`
                     : `✅ تم استيراد ${importedCount} درجة بنجاح!`;
+                
+                if (notFoundCodes.length > 0) {
+                    successMsg += currentLang === 'en'
+                        ? `\n⚠️ Warning: Could not find courses: ${notFoundCodes.join(', ')}`
+                        : `\n⚠️ تحذير: لم يتم العثور على المقررات: ${notFoundCodes.join(', ')}`;
+                }
+                
                 showNotification(successMsg);
                 closeModal();
                 document.getElementById('importText').value = '';
             } else {
-                const errorMsg = currentLang === 'en'
-                    ? '⚠️ No valid course codes found. Make sure to paste your transcript!'
-                    : '⚠️ لم يتم العثور على رموز مقررات صالحة. تأكد من لصق كشف الدرجات!';
+                let errorMsg = currentLang === 'en'
+                    ? '⚠️ No valid grades found. Please check the format:\n'
+                    : '⚠️ لم يتم العثور على درجات صالحة. يرجى التحقق من التنسيق:\n';
+                
+                errorMsg += currentLang === 'en'
+                    ? 'Example: UN101 Total: 85 or TL201: 90'
+                    : 'مثال: UN101 Total: 85 أو TL201: 90';
+                
+                if (notFoundCodes.length > 0) {
+                    errorMsg += currentLang === 'en'
+                        ? `\n\n⚠️ Course codes not in database: ${notFoundCodes.join(', ')}`
+                        : `\n\n⚠️ رموز المقررات غير موجودة: ${notFoundCodes.join(', ')}`;
+                }
+                
                 showNotification(errorMsg);
             }
         }
@@ -1401,9 +1564,12 @@ TL201 - 90"></textarea>
             notification.textContent = message;
             document.body.appendChild(notification);
             
+            // Longer display time for multi-line messages
+            const displayTime = message.includes('\n') ? 5000 : 3000;
+            
             setTimeout(() => {
                 notification.remove();
-            }, 3000);
+            }, displayTime);
         }
     </script>
 </body>

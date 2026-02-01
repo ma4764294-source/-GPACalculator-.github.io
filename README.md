@@ -1,7 +1,8 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Applied Health Sciences Technology - GPA Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -39,6 +40,15 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+        }
+
+        /* Prevent text size adjustment on orientation change */
+        html {
+            -webkit-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
 
         body {
@@ -782,8 +792,13 @@
         }
 
         @media (max-width: 768px) {
+            /* Prevent auto-zoom on input focus */
             body {
-                font-size: 16px; /* Prevent zoom on mobile */
+                font-size: 16px;
+                -webkit-text-size-adjust: 100%;
+                -moz-text-size-adjust: 100%;
+                -ms-text-size-adjust: 100%;
+                text-size-adjust: 100%;
             }
 
             .container {
@@ -792,6 +807,7 @@
 
             h1 {
                 font-size: 1.8rem;
+                margin-top: 3.5rem; /* Space for fixed buttons */
             }
 
             .subtitle {
@@ -812,20 +828,34 @@
             }
 
             .language-switcher {
-                top: 5rem;
+                top: 1rem;
                 left: 1rem;
-                right: 1rem;
-                max-width: calc(100% - 2rem);
+                padding: 0.4rem;
+                gap: 0.3rem;
             }
 
             body[dir="rtl"] .language-switcher {
-                left: 1rem;
+                left: auto;
                 right: 1rem;
+            }
+            
+            .lang-btn {
+                padding: 0.4rem 0.7rem;
+                font-size: 0.85rem;
+                gap: 0.3rem;
+            }
+            
+            .flag {
+                width: 18px;
+                height: 13px;
             }
 
             .theme-toggle {
                 top: 1rem;
                 right: 1rem;
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
             }
 
             body[dir="rtl"] .theme-toggle {
@@ -837,11 +867,13 @@
                 width: 100%;
                 padding: 1rem 1.5rem;
                 font-size: 1rem;
+                min-height: 48px; /* Touch-friendly minimum */
             }
 
             .button-group {
                 flex-direction: column;
                 width: 100%;
+                gap: 0.75rem;
             }
 
             .semester-header {
@@ -892,7 +924,19 @@
             }
 
             .course-card {
-                padding: 1rem;
+                padding: 1.25rem;
+            }
+            
+            .course-name {
+                font-size: 1rem;
+            }
+            
+            .course-code {
+                font-size: 0.85rem;
+            }
+            
+            .course-credits {
+                font-size: 0.9rem;
             }
         }
     </style>

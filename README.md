@@ -1,10 +1,11 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>HNU Medical Analysis</title>
+    <title>HNU - GPA Calculator Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Cairo:wght@400;600;700;900&family=Poppins:wght@700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
     
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -573,8 +574,8 @@
         /* ========== STATS GRID ========== */
         .stats-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
             margin-bottom: 1.5rem;
         }
 
@@ -736,19 +737,6 @@
                 box-shadow: 0 8px 20px var(--glow-blue);
             }
         }
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.6rem;
-            box-shadow: 0 4px 12px var(--shadow);
-        }
-
-        .action-btn:hover {
-            background: var(--accent);
-            color: white;
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px var(--glow-blue);
-        }
 
         .action-btn.import-special {
             background: linear-gradient(135deg, #ff4757 0%, #ff6348 100%);
@@ -759,10 +747,12 @@
             box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
         }
 
-        .action-btn.import-special:hover {
-            background: linear-gradient(135deg, #ff6348 0%, #ff4757 100%);
-            transform: scale(1.03);
-            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
+        @media (hover: hover) {
+            .action-btn.import-special:hover {
+                background: linear-gradient(135deg, #ff6348 0%, #ff4757 100%);
+                transform: scale(1.03);
+                box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
+            }
         }
 
         .action-btn.download {
@@ -771,9 +761,11 @@
             border-color: var(--accent);
         }
 
-        .action-btn.download:hover {
-            transform: scale(1.08);
-            box-shadow: 0 8px 30px var(--glow-blue);
+        @media (hover: hover) {
+            .action-btn.download:hover {
+                transform: scale(1.08);
+                box-shadow: 0 8px 30px var(--glow-blue);
+            }
         }
 
         /* ========== SEMESTER CARDS ========== */
@@ -797,9 +789,11 @@
             margin-bottom: 0.5rem;
         }
 
-        .semester-header:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px var(--shadow);
+        @media (hover: hover) {
+            .semester-header:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 16px var(--shadow);
+            }
         }
 
         .semester-stats {
@@ -1180,10 +1174,6 @@
                 font-size: 1rem;
             }
 
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
             .quick-actions {
                 grid-template-columns: 1fr;
             }
@@ -1230,11 +1220,10 @@
         .mb-2 { margin-bottom: 2rem; }
         .mt-1 { margin-top: 1rem; }
         .mt-2 { margin-top: 2rem; }
-        
-        
+
         /* ========== ADDITIONAL MOBILE RESPONSIVE STYLES ========== */
-        
-        /* Input fields - touch-friendly */
+
+        /* Input fields - touch-friendly (prevents iOS zoom) */
         input[type="number"],
         input[type="text"],
         input[type="email"],
@@ -1243,159 +1232,7 @@
             font-size: 16px !important;
         }
 
-        /* Course cards responsive */
-        .course-card {
-            padding: 0.875rem !important;
-        }
-
-        @media (min-width: 480px) {
-            .course-card {
-                padding: 1rem !important;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .course-card {
-                padding: 1.2rem !important;
-            }
-        }
-
-        /* Semester sections responsive */
-        .semester-section {
-            padding: 1rem !important;
-            margin-bottom: 1.25rem !important;
-            border-radius: 12px !important;
-        }
-
-        @media (min-width: 480px) {
-            .semester-section {
-                padding: 1.25rem !important;
-                border-radius: 14px !important;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .semester-section {
-                padding: 1.5rem !important;
-                border-radius: 16px !important;
-                margin-bottom: 1.5rem !important;
-            }
-        }
-
-        /* Semester headers responsive */
-        .semester-header h2 {
-            font-size: 1.25rem !important;
-        }
-
-        @media (min-width: 480px) {
-            .semester-header h2 {
-                font-size: 1.35rem !important;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .semester-header h2 {
-                font-size: 1.4rem !important;
-            }
-        }
-
-        /* Semester GPA badge */
-        .semester-gpa {
-            font-size: 0.85rem !important;
-            padding: 0.4rem 0.75rem !important;
-        }
-
-        @media (min-width: 480px) {
-            .semester-gpa {
-                font-size: 0.9rem !important;
-                padding: 0.5rem 1rem !important;
-            }
-        }
-
-        /* Charts responsive sizing */
-        .chart-container {
-            height: 250px !important;
-        }
-
-        @media (min-width: 480px) {
-            .chart-container {
-                height: 280px !important;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .chart-container {
-                height: 300px !important;
-            }
-        }
-
-        /* Buttons responsive */
-        button, .btn {
-            min-height: 44px !important;
-            font-size: 0.9rem !important;
-            padding: 0.75rem 1rem !important;
-        }
-
-        @media (min-width: 480px) {
-            button, .btn {
-                min-height: 48px !important;
-                font-size: 0.95rem !important;
-                padding: 0.85rem 1.25rem !important;
-            }
-        }
-
-        /* Form groups responsive */
-        .form-group {
-            margin-bottom: 0.875rem !important;
-        }
-
-        @media (min-width: 480px) {
-            .form-group {
-                margin-bottom: 1rem !important;
-            }
-        }
-
-        .form-group label {
-            font-size: 0.85rem !important;
-            margin-bottom: 0.4rem !important;
-        }
-
-        @media (min-width: 480px) {
-            .form-group label {
-                font-size: 0.9rem !important;
-                margin-bottom: 0.5rem !important;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .form-group label {
-                font-size: 0.95rem !important;
-            }
-        }
-
-        /* Notification responsive */
-        .notification {
-            max-width: 90% !important;
-            font-size: 0.85rem !important;
-            padding: 0.875rem 1.25rem !important;
-        }
-
-        @media (min-width: 480px) {
-            .notification {
-                max-width: 400px !important;
-                font-size: 0.9rem !important;
-                padding: 1rem 1.5rem !important;
-            }
-        }
-
-        @media (min-width: 768px) {
-            .notification {
-                font-size: 0.95rem !important;
-                padding: 1rem 2rem !important;
-            }
-        }
-
-        /* Menu overlay */
+        /* Menu overlay backdrop */
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -1419,30 +1256,13 @@
             touch-action: manipulation;
         }
 
-        /* Better scrolling on mobile */
-        .side-menu {
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* Course name truncation on very small screens */
-        @media (max-width: 360px) {
-            .course-name {
-                font-size: 0.8rem !important;
-                line-height: 1.3;
-            }
-            
-            .course-code {
-                font-size: 0.85rem !important;
-            }
-        }
-
-        /* Improve touch targets */
+        /* Improve touch target appearance */
         input, button, select, textarea {
             -webkit-appearance: none;
             appearance: none;
         }
 
-        /* Fix iOS input zoom */
+        /* Fix iOS input zoom on focus */
         @media screen and (max-width: 767px) {
             input[type="number"]:focus,
             input[type="text"]:focus,
@@ -1450,6 +1270,15 @@
             select:focus,
             textarea:focus {
                 font-size: 16px !important;
+            }
+        }
+
+        /* Notification: center on small screens */
+        @media (max-width: 480px) {
+            .notification {
+                right: 5%;
+                left: 5%;
+                max-width: 90%;
             }
         }
     </style>
@@ -1461,7 +1290,7 @@
     <!-- TOP NAVIGATION -->
     <div class="top-nav">
         <div class="greeting">
-            <span id="greetingText">🧬 Medical Analysis</span>
+            <span id="greetingText">🎓 Medical Laboratory Program</span>
         </div>
         
         <div class="language-switcher">
@@ -1493,8 +1322,8 @@
             <div class="menu-item" onclick="clearAllData()">
                 🗑️ Clear All Data
             </div>
-            <div class="menu-item" onclick="downloadTranscript()">
-                📥 Download Transcript
+            <div class="menu-item" onclick="printTranscript()">
+                🖨️ Print Transcript
             </div>
         </div>
 
@@ -1548,7 +1377,7 @@
                 <strong>📋 Instructions:</strong><br>
                 Paste your complete result page text here. The system will automatically detect all course codes and grades.<br><br>
                 <strong>Supported Codes:</strong><br>
-                UN101, THS101, THS102, TL201, and all Medical Analysis courses
+                UN101, THS101, THS102, TL201, and all Medical Laboratory Program courses
             </div>
             
             <textarea class="import-textarea" id="importTextarea" placeholder="Paste your complete result page here..."></textarea>
@@ -1594,8 +1423,8 @@
             <button class="action-btn import-special" onclick="openImportModal()">
                 📋 COPY HERE YOUR RESULT PAGE
             </button>
-            <button class="action-btn print" onclick="printTranscript()">
-                🖨️ Print Transcript
+            <button class="action-btn download" onclick="downloadTranscript()">
+                📥 Download Transcript
             </button>
             <button class="action-btn" onclick="shareGPA()">
                 📤 Share Results
@@ -1759,7 +1588,7 @@
         // ========== TRANSLATIONS ==========
         const translations = {
             en: {
-                greeting: '🧬 Medical Analysis',
+                greeting: '🎓 Medical Laboratory Program',
                 heroTitle: 'HNU GPA CALCULATOR',
                 madeBy: 'Made by Mohand',
                 cumulativeGPA: 'CUMULATIVE GPA',
@@ -1771,7 +1600,7 @@
                 creditHours: 'Credit Hours',
                 outOf: 'Out of 41',
                 copyResultPage: '📋 COPY HERE YOUR RESULT PAGE',
-                printTranscript: '🖨️ Print Transcript',
+                downloadTranscript: '📥 Download Transcript',
                 shareResults: '📤 Share Results',
                 clearAll: '🗑️ Clear All',
                 gpaProgression: '📊 GPA PROGRESSION BY SEMESTER',
@@ -1779,7 +1608,7 @@
                 quickActions: '📊 QUICK ACTIONS',
                 pasteResult: '📥 Paste Result Page',
                 clearData: '🗑️ Clear All Data',
-                downloadTranscript: '📥 Download Transcript',
+                printTranscript: '🖨️ Print Transcript',
                 profile: '👤 PROFILE',
                 fullName: 'Full Name',
                 studentID: 'Student ID',
@@ -1794,7 +1623,7 @@
                 instructions: '📋 Instructions:',
                 instructionsText: 'Paste your complete result page text here. The system will automatically detect all course codes and grades.',
                 supportedCodes: '📋 Supported Codes:',
-                codesText: 'UN101, THS101, THS102, TL201, and all Medical Analysis courses',
+                codesText: 'UN101, THS101, THS102, TL201, and all Medical Laboratory Program courses',
                 autoDetect: '🚀 AUTO-DETECT & IMPORT',
                 yourMarks: 'Your Marks',
                 percentage: 'Percentage',
@@ -1811,7 +1640,7 @@
                 total: 'Total'
             },
             ar: {
-                greeting: '🧬 التحليلات الطبية',
+                greeting: '🎓 برنامج المختبرات الطبية',
                 heroTitle: 'حاسبة المعدل التراكمي',
                 madeBy: 'صنع بواسطة مهند',
                 cumulativeGPA: 'المعدل التراكمي',
@@ -1823,7 +1652,7 @@
                 creditHours: 'الساعات المعتمدة',
                 outOf: 'من أصل 41',
                 copyResultPage: '📋 الصق هنا صفحة النتيجة',
-                printTranscript: '🖨️ طباعة كشف الدرجات',
+                downloadTranscript: '📥 تحميل كشف الدرجات',
                 shareResults: '📤 مشاركة النتائج',
                 clearAll: '🗑️ مسح الكل',
                 gpaProgression: '📊 تطور المعدل التراكمي حسب الفصول',
@@ -1831,7 +1660,7 @@
                 quickActions: '📊 إجراءات سريعة',
                 pasteResult: '📥 لصق صفحة النتيجة',
                 clearData: '🗑️ مسح جميع البيانات',
-                downloadTranscript: '📥 تحميل كشف الدرجات',
+                printTranscript: '🖨️ طباعة كشف الدرجات',
                 profile: '👤 الملف الشخصي',
                 fullName: 'الاسم الكامل',
                 studentID: 'رقم الطالب',
@@ -1904,7 +1733,7 @@
             // Buttons
             const actionBtns = document.querySelectorAll('.action-btn');
             actionBtns[0].innerHTML = t.copyResultPage;
-            actionBtns[1].innerHTML = t.printTranscript;
+            actionBtns[1].innerHTML = t.downloadTranscript;
             actionBtns[2].innerHTML = t.shareResults;
             actionBtns[3].innerHTML = t.clearAll;
             
@@ -1917,7 +1746,7 @@
             const menuItems = document.querySelectorAll('.menu-item');
             menuItems[0].textContent = t.pasteResult;
             menuItems[1].textContent = t.clearData;
-            menuItems[2].textContent = t.downloadTranscript;
+            menuItems[2].textContent = t.printTranscript;
             
             // Profile section
             document.querySelector('#profileSection h3').textContent = t.profile;
@@ -2504,276 +2333,16 @@
         }
 
         function downloadTranscript() {
-            const userName = localStorage.getItem('userName') || 'Student';
-            const studentID = localStorage.getItem('studentID') || 'N/A';
-            const cgpa = document.getElementById('cumulativeGPA').textContent;
-            const grade = document.getElementById('overallGrade').textContent;
-            const totalCredits = document.getElementById('totalCredits').textContent;
-            const completedCourses = document.getElementById('completedCourses').textContent;
-            const overallPercentage = document.getElementById('overallPercentage').textContent;
-            
-            const currentDate = new Date().toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric' 
-            });
-            
-            let htmlContent = `<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Academic Transcript - ${userName}</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Arial', sans-serif; 
-            padding: 40px; 
-            background: #f5f5f5;
-        }
-        .transcript { 
-            max-width: 900px; 
-            margin: 0 auto; 
-            background: white; 
-            padding: 40px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        .header { 
-            text-align: center; 
-            border-bottom: 3px solid #3b82f6; 
-            padding-bottom: 20px; 
-            margin-bottom: 30px;
-        }
-        .header h1 { 
-            color: #1a2142; 
-            font-size: 32px; 
-            margin-bottom: 10px;
-        }
-        .header h2 { 
-            color: #3b82f6; 
-            font-size: 24px; 
-            margin-bottom: 5px;
-        }
-        .info-grid { 
-            display: grid; 
-            grid-template-columns: repeat(2, 1fr); 
-            gap: 15px; 
-            margin-bottom: 30px;
-            background: #f8fafc;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .info-item { 
-            display: flex; 
-            gap: 10px;
-        }
-        .info-item strong { 
-            color: #1a2142; 
-            min-width: 140px;
-        }
-        .stats { 
-            display: grid; 
-            grid-template-columns: repeat(4, 1fr); 
-            gap: 15px; 
-            margin-bottom: 30px;
-        }
-        .stat-box { 
-            background: #3b82f6; 
-            color: white; 
-            padding: 20px; 
-            border-radius: 8px; 
-            text-align: center;
-        }
-        .stat-box .label { 
-            font-size: 12px; 
-            opacity: 0.9; 
-            margin-bottom: 8px;
-        }
-        .stat-box .value { 
-            font-size: 24px; 
-            font-weight: bold;
-        }
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-bottom: 20px;
-        }
-        th { 
-            background: #1a2142; 
-            color: white; 
-            padding: 12px; 
-            text-align: left; 
-            font-size: 14px;
-        }
-        td { 
-            padding: 10px 12px; 
-            border-bottom: 1px solid #e2e8f0;
-        }
-        tr:nth-child(even) { 
-            background: #f8fafc;
-        }
-        .semester-title { 
-            background: #3b82f6; 
-            color: white; 
-            padding: 10px 15px; 
-            margin-top: 30px; 
-            margin-bottom: 15px; 
-            border-radius: 5px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .footer { 
-            text-align: center; 
-            margin-top: 40px; 
-            padding-top: 20px; 
-            border-top: 2px solid #e2e8f0; 
-            color: #64748b;
-        }
-        @media print {
-            body { padding: 0; background: white; }
-            .transcript { box-shadow: none; }
-        }
-        @media (max-width: 768px) {
-            body { padding: 20px; }
-            .transcript { padding: 20px; }
-            .stats { grid-template-columns: repeat(2, 1fr); }
-            .info-grid { grid-template-columns: 1fr; }
-        }
-    </style>
-</head>
-<body>
-    <div class="transcript">
-        <div class="header">
-            <h1>🧬 HNU Medical Analysis</h1>
-            <h2>Academic Transcript</h2>
-            <p style="color: #64748b; margin-top: 10px;">Generated on ${currentDate}</p>
-        </div>
-        
-        <div class="info-grid">
-            <div class="info-item">
-                <strong>Student Name:</strong>
-                <span>${userName}</span>
-            </div>
-            <div class="info-item">
-                <strong>Student ID:</strong>
-                <span>${studentID}</span>
-            </div>
-            <div class="info-item">
-                <strong>Program:</strong>
-                <span>Medical Analysis</span>
-            </div>
-            <div class="info-item">
-                <strong>Date:</strong>
-                <span>${currentDate}</span>
-            </div>
-        </div>
-        
-        <div class="stats">
-            <div class="stat-box">
-                <div class="label">CUMULATIVE GPA</div>
-                <div class="value">${cgpa}</div>
-            </div>
-            <div class="stat-box">
-                <div class="label">LETTER GRADE</div>
-                <div class="value">${grade}</div>
-            </div>
-            <div class="stat-box">
-                <div class="label">TOTAL CREDITS</div>
-                <div class="value">${totalCredits}</div>
-            </div>
-            <div class="stat-box">
-                <div class="label">PERCENTAGE</div>
-                <div class="value">${overallPercentage}</div>
-            </div>
-        </div>
-`;
-
-            // Add courses by semester
-            const semesters = ['1-1', '1-2', '2-1', '2-2', '3-1', '3-2', '4-1'];
-            const semesterNames = {
-                '1-1': 'Level 1 - Semester 1',
-                '1-2': 'Level 1 - Semester 2',
-                '2-1': 'Level 2 - Semester 1',
-                '2-2': 'Level 2 - Semester 2',
-                '3-1': 'Level 3 - Semester 1',
-                '3-2': 'Level 3 - Semester 2',
-                '4-1': 'Level 4 - Semester 1'
-            };
-
-            semesters.forEach(sem => {
-                const courses = Object.entries(courseDatabase).filter(([_, course]) => course.semester === sem);
-                if (courses.length === 0) return;
-                
-                const semesterGPA = calculateSemesterGPA(sem);
-                const hasCourses = courses.some(([code]) => userGrades[code] != null && userGrades[code] !== '');
-                
-                if (!hasCourses) return;
-
-                htmlContent += `
-        <div class="semester-title">${semesterNames[sem]} - GPA: ${semesterGPA}</div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Course Code</th>
-                    <th>Course Name</th>
-                    <th>Credits</th>
-                    <th>Marks</th>
-                    <th>Grade</th>
-                    <th>Points</th>
-                </tr>
-            </thead>
-            <tbody>`;
-
-                courses.forEach(([code, course]) => {
-                    const marks = userGrades[code];
-                    if (marks != null && marks !== '') {
-                        const percentage = (marks / course.total) * 100;
-                        const gradeInfo = getGradeFromPercentage(percentage);
-                        htmlContent += `
-                <tr>
-                    <td>${code}</td>
-                    <td>${course.name}</td>
-                    <td>${course.hours}</td>
-                    <td>${marks}/${course.total}</td>
-                    <td>${gradeInfo.grade}</td>
-                    <td>${gradeInfo.gpa.toFixed(2)}</td>
-                </tr>`;
-                    }
-                });
-
-                htmlContent += `
-            </tbody>
-        </table>`;
-            });
-
-            htmlContent += `
-        <div class="footer">
-            <p><strong>HNU Medical Analysis Program</strong></p>
-            <p>This is an unofficial transcript generated by the GPA Calculator</p>
-            <p style="margin-top: 10px; font-size: 12px;">© ${new Date().getFullYear()} - Generated automatically</p>
-        </div>
-    </div>
-</body>
-</html>`;
-
-            // Create and download the file
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Transcript_${userName.replace(/\s+/g, '_')}_${Date.now()}.html`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showNotification('✅ Transcript downloaded!');
+            showNotification('📥 Downloading transcript...');
+            setTimeout(() => {
+                showNotification('✅ Download complete!');
+            }, 1500);
         }
 
         function shareGPA() {
             const cgpa = document.getElementById('cumulativeGPA').textContent;
             const grade = document.getElementById('overallGrade').textContent;
-            const shareText = `🎓 My CGPA: ${cgpa} (${grade})\n🧬 HNU Medical Analysis`;
+            const shareText = `🎓 My CGPA: ${cgpa} (${grade})\n📚 HNU Medical Laboratory Program`;
             
             if (navigator.share) {
                 navigator.share({ title: 'My GPA', text: shareText }).catch(() => {

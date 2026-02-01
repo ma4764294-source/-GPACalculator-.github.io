@@ -1,7 +1,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <title>Applied Health Sciences Technology - GPA Calculator</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
@@ -48,6 +50,11 @@
             -moz-text-size-adjust: 100%;
             -ms-text-size-adjust: 100%;
             text-size-adjust: 100%;
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+            position: fixed;
+            position: relative;
         }
 
         body {
@@ -57,6 +64,13 @@
             min-height: 100vh;
             transition: background 0.3s, color 0.3s;
             padding-bottom: 3rem;
+            width: 100%;
+            overflow-x: hidden;
+            position: relative;
+            -webkit-text-size-adjust: 100%;
+            -moz-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            text-size-adjust: 100%;
         }
 
         body[dir="rtl"] {
@@ -147,6 +161,8 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
+            width: 100%;
+            overflow-x: hidden;
         }
 
         header {
@@ -553,7 +569,7 @@
             border-radius: 8px;
             padding: 0.75rem;
             color: var(--text-primary);
-            font-size: 1rem;
+            font-size: 16px; /* Critical: 16px minimum to prevent iOS zoom */
             font-weight: 600;
             transition: all 0.3s;
             width: 100%;
@@ -698,7 +714,7 @@
             padding: 1rem;
             color: var(--text-primary);
             font-family: 'Courier New', monospace;
-            font-size: 0.9rem;
+            font-size: 16px; /* Critical: 16px minimum to prevent iOS zoom */
             resize: vertical;
         }
 
@@ -791,17 +807,30 @@
         }
 
         @media (max-width: 768px) {
-            /* Prevent auto-zoom on input focus */
+            /* Prevent auto-zoom on input focus - CRITICAL FOR GITHUB PAGES */
+            * {
+                -webkit-text-size-adjust: 100% !important;
+                -moz-text-size-adjust: 100% !important;
+                -ms-text-size-adjust: 100% !important;
+                text-size-adjust: 100% !important;
+            }
+            
+            html, body {
+                width: 100%;
+                overflow-x: hidden;
+                font-size: 16px;
+                -webkit-text-size-adjust: 100% !important;
+                text-size-adjust: 100% !important;
+            }
+            
             body {
                 font-size: 16px;
-                -webkit-text-size-adjust: 100%;
-                -moz-text-size-adjust: 100%;
-                -ms-text-size-adjust: 100%;
-                text-size-adjust: 100%;
             }
 
             .container {
                 padding: 1rem;
+                width: 100%;
+                max-width: 100%;
             }
 
             h1 {
@@ -939,6 +968,28 @@
             }
         }
     </style>
+    <script>
+        // Force viewport scale on load - prevents GitHub Pages mobile auto-zoom
+        (function() {
+            // Remove any existing viewport meta tags
+            var existingViewport = document.querySelector('meta[name="viewport"]');
+            if (existingViewport) {
+                existingViewport.remove();
+            }
+            
+            // Create and insert a fresh viewport meta tag
+            var viewport = document.createElement('meta');
+            viewport.name = 'viewport';
+            viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no';
+            document.head.appendChild(viewport);
+            
+            // Prevent zoom on orientation change
+            window.addEventListener('orientationchange', function() {
+                document.querySelector('meta[name="viewport"]').setAttribute('content', 
+                    'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no');
+            });
+        })();
+    </script>
 </head>
 <body>
     <button class="theme-toggle" onclick="toggleTheme()">🌙</button>

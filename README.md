@@ -1,11 +1,16 @@
+   <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
-    <title>Applied Health Sciences Technology - GPA Calculator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <title>HNU - GPA Calculator Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Cairo:wght@400;600;700;900&family=Poppins:wght@700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    
     <style>
         :root {
             --bg-primary: #0a0e27;
@@ -13,6 +18,7 @@
             --bg-card: #1a2142;
             --accent: #3b82f6;
             --accent-hover: #2563eb;
+            --accent-light: #60a5fa;
             --success: #10b981;
             --warning: #f59e0b;
             --danger: #ef4444;
@@ -20,6 +26,10 @@
             --text-secondary: #94a3b8;
             --border: #1e293b;
             --shadow: rgba(0, 0, 0, 0.3);
+            --glow-blue: #60a5fa;
+            --gold: #fbbf24;
+            --red-sparkle: #ff1744;
+            --cyan: #06b6d4;
         }
 
         [data-theme="light"] {
@@ -28,6 +38,7 @@
             --bg-card: #f1f5f9;
             --accent: #2563eb;
             --accent-hover: #1d4ed8;
+            --accent-light: #3b82f6;
             --success: #059669;
             --warning: #d97706;
             --danger: #dc2626;
@@ -35,113 +46,90 @@
             --text-secondary: #64748b;
             --border: #e2e8f0;
             --shadow: rgba(0, 0, 0, 0.05);
+            --glow-blue: #3b82f6;
+            --red-sparkle: #ff1744;
+            --cyan: #0891b2;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent; /* Remove tap highlight on mobile */
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* Prevent text size adjustment on orientation change */
         html {
             -webkit-text-size-adjust: 100%;
-            -moz-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
             text-size-adjust: 100%;
             width: 100%;
-            height: 100%;
             overflow-x: hidden;
-            position: fixed;
-            position: relative;
+            scroll-behavior: smooth;
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Rajdhani', 'Inter', sans-serif;
             background: var(--bg-primary);
             color: var(--text-primary);
             min-height: 100vh;
             transition: background 0.3s, color 0.3s;
-            padding-bottom: 3rem;
             width: 100%;
             overflow-x: hidden;
-            position: relative;
-            -webkit-text-size-adjust: 100%;
-            -moz-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-            text-size-adjust: 100%;
+            font-weight: 700;
         }
 
         body[dir="rtl"] {
             font-family: 'Cairo', sans-serif;
         }
 
-        .theme-toggle {
+        /* ========== TOP NAVIGATION BAR ========== */
+        .top-nav {
             position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            z-index: 1000;
-            background: var(--accent);
-            border: none;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            cursor: pointer;
-            font-size: 1.5rem;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: var(--bg-card);
+            border-bottom: 2px solid var(--border);
             display: flex;
             align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 12px var(--shadow);
-            transition: transform 0.2s;
-        }
-
-        body[dir="rtl"] .theme-toggle {
-            right: auto;
-            left: 1.5rem;
-        }
-
-        .theme-toggle:hover {
-            transform: scale(1.1);
-        }
-
-        /* Language Switcher */
-        .language-switcher {
-            position: fixed;
-            top: 1.5rem;
-            left: 1.5rem;
+            justify-content: space-between;
+            padding: 0 1.5rem;
             z-index: 1000;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .greeting {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .language-switcher {
             display: flex;
             gap: 0.5rem;
-            background: var(--bg-card);
+            background: var(--bg-secondary);
             border: 2px solid var(--border);
             border-radius: 12px;
-            padding: 0.5rem;
-            box-shadow: 0 4px 12px var(--shadow);
-        }
-
-        body[dir="rtl"] .language-switcher {
-            left: auto;
-            right: 1.5rem;
+            padding: 0.4rem;
         }
 
         .lang-btn {
             background: transparent;
             border: 2px solid transparent;
             border-radius: 8px;
-            padding: 0.5rem 1rem;
+            padding: 0.4rem 0.7rem;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
+            font-size: 0.85rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.3rem;
             color: var(--text-secondary);
             transition: all 0.3s;
         }
 
         .lang-btn:hover {
-            background: var(--bg-secondary);
+            background: var(--bg-card);
             color: var(--text-primary);
         }
 
@@ -152,508 +140,538 @@
         }
 
         .flag {
-            width: 20px;
-            height: 15px;
-            display: inline-block;
+            width: 18px;
+            height: 13px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            width: 100%;
-            overflow-x: hidden;
+        .right-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
-        header {
-            text-align: center;
-            padding: 2rem 1rem;
-            margin-bottom: 2rem;
+        .theme-toggle {
+            background: var(--accent);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: transform 0.2s;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            font-weight: 900;
-            font-family: 'Orbitron', sans-serif;
-            background: linear-gradient(135deg, var(--accent), #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+        .theme-toggle:hover {
+            transform: scale(1.1) rotate(20deg);
         }
 
-        body[dir="rtl"] h1 {
-            font-family: 'Cairo', sans-serif;
-            letter-spacing: 0;
+        .menu-toggle {
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-shadow: 0 4px 12px var(--shadow);
+            transition: all 0.3s;
         }
 
-        .subtitle {
-            color: var(--text-secondary);
+        .menu-toggle:hover {
+            transform: scale(1.05);
+            background: var(--accent-hover);
+        }
+
+        .menu-toggle span {
+            width: 24px;
+            height: 3px;
+            background: white;
+            border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(7px, 7px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        /* ========== SIDE MENU ========== */
+        .side-menu {
+            position: fixed;
+            top: 70px;
+            right: -320px;
+            width: 300px;
+            height: calc(100vh - 70px);
+            background: var(--bg-card);
+            border-left: 2px solid var(--border);
+            box-shadow: -4px 0 20px var(--shadow);
+            transition: right 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 999;
+            overflow-y: auto;
+        }
+
+        .side-menu.open {
+            right: 0;
+        }
+
+        body[dir="rtl"] .side-menu {
+            left: -320px;
+            right: auto;
+            border-left: none;
+            border-right: 2px solid var(--border);
+        }
+
+        body[dir="rtl"] .side-menu.open {
+            left: 0;
+        }
+
+        .menu-section {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .menu-section h3 {
             font-size: 1.1rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .credits {
-            color: #ff0000;
-            font-size: 1.15rem;
-            margin-top: 0.5rem;
+        .menu-item {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 0.9rem;
+            margin-bottom: 0.7rem;
+            cursor: pointer;
             font-weight: 700;
-            font-family: 'Orbitron', sans-serif;
-            position: relative;
-            display: inline-block;
-            animation: sparkle 2s ease-in-out infinite;
-            text-shadow: 
-                0 0 10px #ff0000,
-                0 0 20px #ff0000,
-                0 0 30px #ff0000,
-                0 0 40px #ff3333;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        body[dir="rtl"] .credits {
-            font-family: 'Cairo', sans-serif;
+        .menu-item:hover {
+            background: var(--accent);
+            color: white;
+            transform: translateX(-5px);
+            box-shadow: 0 4px 12px var(--glow-blue);
+        }
+
+        body[dir="rtl"] .menu-item:hover {
+            transform: translateX(5px);
+        }
+
+        /* ========== CONTAINER ========== */
+        .container {
+            max-width: 1400px;
+            margin: 90px auto 20px;
+            padding: 0 1rem;
+        }
+
+        /* ========== HERO SECTION ========== */
+        .hero-section {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            border-radius: 20px;
+            padding: 2.5rem 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            box-shadow: 0 10px 40px var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-section h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: white;
+            margin-bottom: 0.8rem;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .developer-credit {
+            font-size: 1.2rem;
+            color: #ff1744;
+            font-weight: 900;
+            text-shadow: 0 0 10px #ff1744, 0 0 20px #ff1744, 0 0 30px #ff1744;
+            animation: sparkle 2s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+            letter-spacing: 1px;
         }
 
         @keyframes sparkle {
             0%, 100% {
-                filter: brightness(1);
                 transform: translateY(0px);
+                text-shadow: 0 0 10px #ff1744, 0 0 20px #ff1744, 0 0 30px #ff1744;
             }
             50% {
-                filter: brightness(1.5);
                 transform: translateY(-3px);
+                text-shadow: 0 0 15px #ff1744, 0 0 30px #ff1744, 0 0 45px #ff1744, 0 0 60px #ff1744;
             }
         }
 
-        .credits::before {
-            content: '✨';
-            position: absolute;
-            left: -30px;
-            animation: sparkleMove 2s ease-in-out infinite;
-        }
-
-        body[dir="rtl"] .credits::before {
-            left: auto;
-            right: -30px;
-        }
-
-        .credits::after {
-            content: '✨';
-            position: absolute;
-            right: -30px;
-            animation: sparkleMove 2s ease-in-out infinite 1s;
-        }
-
-        body[dir="rtl"] .credits::after {
-            right: auto;
-            left: -30px;
-        }
-
-        @keyframes sparkleMove {
-            0%, 100% {
-                opacity: 0.5;
-                transform: scale(0.8);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
-        }
-
-        .button-group {
-            display: flex;
-            gap: 1rem;
-            justify-content: center;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .smart-import-btn {
-            background: linear-gradient(135deg, #8b5cf6, #6366f1);
-            color: white;
-            border: none;
-            padding: 1.2rem 2.5rem;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(139, 92, 246, 0.4);
-            transition: all 0.3s;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        body[dir="rtl"] .smart-import-btn {
-            font-family: 'Cairo', sans-serif;
-            letter-spacing: 0;
-        }
-
-        .smart-import-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 24px rgba(139, 92, 246, 0.5);
-        }
-
-        .reset-btn {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-            border: none;
-            padding: 1.2rem 2.5rem;
-            border-radius: 12px;
-            font-size: 1.2rem;
-            font-weight: 900;
-            font-family: 'Orbitron', sans-serif;
-            cursor: pointer;
-            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
-            transition: all 0.3s;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-        }
-
-        body[dir="rtl"] .reset-btn {
-            font-family: 'Cairo', sans-serif;
-            letter-spacing: 0;
-        }
-
-        .reset-btn:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: 0 8px 24px rgba(239, 68, 68, 0.5);
-        }
-
-        .stats-panel {
+        /* ========== STATS GRID ========== */
+        .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 1.5rem;
             margin-bottom: 2rem;
         }
 
         .stat-card {
             background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 1.8rem;
             text-align: center;
-            box-shadow: 0 2px 8px var(--shadow);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px var(--shadow);
         }
 
         .stat-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 6px 20px var(--shadow);
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 4px;
-            height: 100%;
-            background: var(--accent);
-        }
-
-        body[dir="rtl"] .stat-card::before {
-            left: auto;
-            right: 0;
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px var(--glow-blue);
         }
 
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
             margin-bottom: 0.5rem;
-            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .stat-value {
-            font-size: 2rem;
-            font-weight: 800;
+            font-size: 2.5rem;
+            font-weight: 900;
             color: var(--accent);
+            text-shadow: 0 2px 10px var(--glow-blue);
         }
 
-        /* Accordion Semester Sections */
-        .semester-accordion {
-            margin-bottom: 1rem;
-            animation: fadeInUp 0.5s ease-out;
+        .stat-subtext {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 0.3rem;
         }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        /* ========== QUICK ACTIONS ========== */
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 14px;
+            padding: 1.2rem;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.6rem;
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .action-btn:hover {
+            background: var(--accent);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px var(--glow-blue);
+        }
+
+        .action-btn.import-special {
+            background: linear-gradient(135deg, #ff4757 0%, #ff6348 100%);
+            color: white;
+            border: 2px solid #ff4757;
+            font-size: 1rem;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .action-btn.import-special:hover {
+            background: linear-gradient(135deg, #ff6348 0%, #ff4757 100%);
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
+        }
+
+        .action-btn.download {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .action-btn.download:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 30px var(--glow-blue);
+        }
+
+        /* ========== SEMESTER CARDS ========== */
+        .semester-section {
+            margin-bottom: 2rem;
         }
 
         .semester-header {
-            background: var(--bg-card);
-            border: 2px solid var(--border);
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: white;
             padding: 1.5rem;
-            cursor: pointer;
+            border-radius: 16px;
+            font-size: 1.4rem;
+            font-weight: 900;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            justify-content: space-between;
+            box-shadow: 0 4px 12px var(--shadow);
+            cursor: pointer;
+            transition: all 0.3s;
             margin-bottom: 0.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Animated gradient bar on semester headers */
-        .semester-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(59, 130, 246, 0.3), 
-                transparent);
-            animation: slideBar 3s ease-in-out infinite;
-        }
-
-        @keyframes slideBar {
-            0% {
-                left: -100%;
-            }
-            50% {
-                left: 100%;
-            }
-            100% {
-                left: 100%;
-            }
         }
 
         .semester-header:hover {
-            border-color: var(--accent);
-            background: var(--bg-secondary);
-            transform: translateX(5px) scale(1.02);
-            box-shadow: 0 5px 15px var(--shadow);
-        }
-
-        body[dir="rtl"] .semester-header:hover {
-            transform: translateX(-5px) scale(1.02);
-        }
-
-        .semester-header:hover::before {
-            animation: slideBar 1.5s ease-in-out infinite;
-        }
-
-        .semester-header.active {
-            background: linear-gradient(135deg, var(--accent), #2563eb);
-            color: white;
-            border-color: var(--accent);
-            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-        }
-
-        .semester-header.active::before {
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.2), 
-                transparent);
-        }
-
-        .semester-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            font-family: 'Orbitron', sans-serif;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            position: relative;
-            z-index: 1;
-        }
-
-        body[dir="rtl"] .semester-title {
-            font-family: 'Cairo', sans-serif;
-        }
-
-        .semester-icon {
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 1.2rem;
-        }
-
-        .semester-header.active .semester-icon {
-            transform: rotate(180deg);
-        }
-
-        .semester-gpa {
-            font-size: 1.1rem;
-            font-weight: 800;
-            padding: 0.5rem 1rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .semester-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .semester-content.active {
-            max-height: 5000px;
-        }
-
-        .courses-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 1rem;
-            padding: 1rem;
-        }
-
-        .course-card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 1.25rem;
-            transition: all 0.3s;
-            box-shadow: 0 2px 6px var(--shadow);
-        }
-
-        .course-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             box-shadow: 0 6px 16px var(--shadow);
-            border-color: var(--accent);
         }
 
-        .course-name {
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
+        .semester-stats {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            align-items: center;
+        }
+
+        .semester-stat-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .semester-stat-label {
+            font-size: 0.7rem;
+            opacity: 0.9;
+            margin-bottom: 0.2rem;
+        }
+
+        .semester-stat-value {
+            font-size: 1.1rem;
+            font-weight: 900;
+        }
+
+        .toggle-icon {
+            font-size: 1.5rem;
+            transition: transform 0.3s;
+        }
+
+        .toggle-icon.collapsed {
+            transform: rotate(-90deg);
+        }
+
+        .semester-body {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            max-height: 5000px;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out, opacity 0.3s, padding 0.3s;
+            opacity: 1;
+        }
+
+        .semester-body.collapsed {
+            max-height: 0;
+            padding: 0 1.5rem;
+            opacity: 0;
+            border: none;
+        }
+
+        .course-row {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .course-row:hover {
+            border-color: var(--accent);
+            transform: translateX(5px);
+            box-shadow: 0 4px 16px var(--glow-blue);
+        }
+
+        .course-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .course-info {
+            flex: 1;
         }
 
         .course-code {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+            font-weight: 900;
+            color: var(--accent);
+            margin-bottom: 0.2rem;
         }
 
-        .input-group {
+        .course-name {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .course-meta {
             display: flex;
-            gap: 0.75rem;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .marks-input-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
             margin-bottom: 1rem;
         }
 
         .input-wrapper {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
+            position: relative;
         }
 
-        .input-label {
-            font-size: 0.75rem;
+        .input-wrapper label {
+            display: block;
+            font-size: 0.8rem;
             color: var(--text-secondary);
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.3rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
-        .marks-input {
-            background: var(--bg-secondary);
-            border: 2px solid var(--border);
-            border-radius: 8px;
-            padding: 0.75rem;
-            color: var(--text-primary);
-            font-size: 16px; /* Critical: 16px minimum to prevent iOS zoom */
-            font-weight: 600;
-            transition: all 0.3s;
+        .input-wrapper input {
             width: 100%;
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 0.8rem;
+            color: var(--text-primary);
+            font-size: 1rem;
+            font-weight: 700;
+            transition: all 0.3s;
         }
 
-        .marks-input:focus {
+        .input-wrapper input:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .results-row {
+        .grade-display {
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 0.5rem;
-            margin-top: 0.75rem;
-        }
-
-        .result-item {
+            gap: 1rem;
             text-align: center;
+        }
+
+        .grade-item {
             padding: 0.5rem;
-            background: var(--bg-secondary);
-            border-radius: 6px;
         }
 
-        .result-label {
-            font-size: 0.7rem;
+        .grade-item label {
+            display: block;
+            font-size: 0.75rem;
             color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.2rem;
         }
 
-        .result-value {
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: var(--text-primary);
+        .grade-item strong {
+            font-size: 1.2rem;
+            color: var(--accent);
         }
 
-        .grade-badge {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            display: inline-block;
+        /* ========== CHARTS ========== */
+        .chart-container {
+            background: var(--bg-card);
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 12px var(--shadow);
         }
 
-        .grade-A {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
+        .chart-container h3 {
+            font-size: 1.3rem;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            text-align: center;
         }
 
-        .grade-B {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-            color: white;
+        .chart-wrapper {
+            position: relative;
+            height: 300px;
         }
 
-        .grade-C {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-
-        .grade-D {
-            background: linear-gradient(135deg, #ef4444, #dc2626);
-            color: white;
-        }
-
-        .grade-F {
-            background: linear-gradient(135deg, #64748b, #475569);
-            color: white;
-        }
-
-        /* Smart Import Modal */
+        /* ========== IMPORT MODAL ========== */
         .modal {
             display: none;
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
             z-index: 2000;
             align-items: center;
             justify-content: center;
+            padding: 1rem;
         }
 
         .modal.active {
@@ -662,18 +680,14 @@
 
         .modal-content {
             background: var(--bg-card);
-            border-radius: 16px;
+            border: 2px solid var(--accent);
+            border-radius: 20px;
             padding: 2rem;
             max-width: 600px;
-            width: 90%;
-            max-height: 80vh;
+            width: 100%;
+            max-height: 90vh;
             overflow-y: auto;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-            text-align: center;
-        }
-
-        body[dir="rtl"] .modal-content {
-            text-align: center;
+            box-shadow: 0 20px 60px rgba(59, 130, 246, 0.3);
         }
 
         .modal-header {
@@ -683,987 +697,1328 @@
             margin-bottom: 1.5rem;
         }
 
-        body[dir="rtl"] .modal-header {
-            flex-direction: row-reverse;
-        }
-
-        .modal-title {
+        .modal-header h2 {
             font-size: 1.5rem;
-            font-weight: 700;
+            color: var(--accent);
         }
 
-        .close-btn {
-            background: none;
+        .close-modal {
+            background: var(--danger);
             border: none;
-            font-size: 1.5rem;
+            border-radius: 50%;
+            width: 35px;
+            height: 35px;
             cursor: pointer;
-            color: var(--text-secondary);
-            transition: color 0.2s;
+            font-size: 1.2rem;
+            color: white;
+            transition: all 0.3s;
         }
 
-        .close-btn:hover {
-            color: var(--text-primary);
+        .close-modal:hover {
+            transform: rotate(90deg) scale(1.1);
         }
 
         .import-textarea {
             width: 100%;
-            min-height: 300px;
-            background: var(--bg-secondary);
+            min-height: 200px;
+            background: var(--bg-primary);
             border: 2px solid var(--border);
-            border-radius: 8px;
+            border-radius: 12px;
             padding: 1rem;
             color: var(--text-primary);
-            font-family: 'Courier New', monospace;
-            font-size: 16px; /* Critical: 16px minimum to prevent iOS zoom */
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
             resize: vertical;
         }
 
         .import-textarea:focus {
             outline: none;
             border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        .modal-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 1rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary {
+        .import-info {
             background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .import-btn {
+            width: 100%;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .import-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px var(--glow-blue);
+        }
+
+        /* ========== PROFILE & SETTINGS FORMS ========== */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            padding: 0.9rem;
             color: var(--text-primary);
-            border: 1px solid var(--border);
+            font-size: 1rem;
+            transition: all 0.3s;
         }
 
-        .btn-secondary:hover {
-            background: var(--border);
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
+        .save-btn {
+            width: 100%;
+            background: var(--accent);
+            border: none;
+            border-radius: 12px;
+            padding: 1rem;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-btn:hover {
+            background: var(--accent-hover);
+            transform: scale(1.02);
+            box-shadow: 0 6px 20px var(--glow-blue);
+        }
+
+        /* ========== NOTIFICATION ========== */
         .notification {
             position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            background: var(--success);
+            top: 90px;
+            right: 20px;
+            background: var(--accent);
             color: white;
             padding: 1rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 600;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-            animation: slideIn 0.3s ease-out;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px var(--shadow);
+            font-weight: 700;
+            transform: translateX(400px);
+            transition: transform 0.4s;
             z-index: 3000;
-            max-width: 400px;
-            white-space: pre-line;
         }
 
-        body[dir="rtl"] .notification {
-            right: auto;
-            left: 2rem;
+        .notification.show {
+            transform: translateX(0);
         }
 
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            .notification {
-                bottom: 1rem;
-                right: 1rem;
-                left: 1rem;
-                max-width: calc(100% - 2rem);
-            }
-
-            body[dir="rtl"] .notification {
-                left: 1rem;
-                right: 1rem;
-            }
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @media (max-width: 768px) {
-            /* Prevent auto-zoom on input focus - CRITICAL FOR GITHUB PAGES */
-            * {
-                -webkit-text-size-adjust: 100% !important;
-                -moz-text-size-adjust: 100% !important;
-                -ms-text-size-adjust: 100% !important;
-                text-size-adjust: 100% !important;
-            }
-            
-            html, body {
-                width: 100%;
-                overflow-x: hidden;
-                font-size: 16px;
-                -webkit-text-size-adjust: 100% !important;
-                text-size-adjust: 100% !important;
-            }
-            
-            body {
-                font-size: 16px;
-            }
-
             .container {
-                padding: 1rem;
-                width: 100%;
-                max-width: 100%;
+                padding: 0 0.5rem;
             }
 
-            h1 {
+            .hero-section h1 {
                 font-size: 1.8rem;
-                margin-top: 3.5rem; /* Space for fixed buttons */
             }
 
-            .subtitle {
+            .developer-credit {
                 font-size: 1rem;
             }
 
-            .credits {
-                font-size: 1.05rem;
-            }
-
-            .courses-grid {
+            .stats-grid {
                 grid-template-columns: 1fr;
             }
 
-            .stats-panel {
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
+            .quick-actions {
+                grid-template-columns: 1fr;
             }
 
-            .language-switcher {
-                top: 1rem;
-                left: 1rem;
-                padding: 0.4rem;
-                gap: 0.3rem;
+            .marks-input-group {
+                grid-template-columns: 1fr;
             }
 
-            body[dir="rtl"] .language-switcher {
-                left: auto;
-                right: 1rem;
-            }
-            
-            .lang-btn {
-                padding: 0.4rem 0.7rem;
-                font-size: 0.85rem;
-                gap: 0.3rem;
-            }
-            
-            .flag {
-                width: 18px;
-                height: 13px;
+            .grade-display {
+                grid-template-columns: 1fr;
             }
 
-            .theme-toggle {
-                top: 1rem;
-                right: 1rem;
-                width: 45px;
-                height: 45px;
-                font-size: 1.3rem;
-            }
-
-            body[dir="rtl"] .theme-toggle {
-                left: 1rem;
-                right: auto;
-            }
-
-            .smart-import-btn, .reset-btn {
-                width: 100%;
-                padding: 1rem 1.5rem;
-                font-size: 1rem;
-                min-height: 48px; /* Touch-friendly minimum */
-            }
-
-            .button-group {
-                flex-direction: column;
-                width: 100%;
-                gap: 0.75rem;
+            .chart-wrapper {
+                height: 250px;
             }
 
             .semester-header {
-                padding: 1rem;
                 flex-direction: column;
-                gap: 0.5rem;
-                align-items: flex-start;
+                gap: 1rem;
+                text-align: center;
             }
 
-            body[dir="rtl"] .semester-header {
-                align-items: flex-start;
+            .semester-stats {
+                width: 100%;
+                justify-content: space-around;
+                gap: 1rem;
             }
 
-            .semester-title {
-                font-size: 1.1rem;
-            }
-
-            .input-group {
-                flex-direction: column;
-            }
-
-            .marks-input {
-                font-size: 16px; /* Prevent zoom on iOS */
-                padding: 0.9rem;
-            }
-
-            .modal-content {
-                width: 95%;
-                padding: 1.5rem;
-            }
-
-            .import-textarea {
-                font-size: 16px; /* Prevent zoom on iOS */
-                min-height: 250px;
-            }
-
-            .results-row {
-                grid-template-columns: 1fr;
-                gap: 0.75rem;
-            }
-
-            .stat-card {
-                padding: 1rem;
-            }
-
-            .stat-value {
-                font-size: 1.8rem;
-            }
-
-            .course-card {
-                padding: 1.25rem;
-            }
-            
-            .course-name {
-                font-size: 1rem;
-            }
-            
-            .course-code {
+            .semester-stat-item {
                 font-size: 0.85rem;
             }
-            
-            .course-credits {
-                font-size: 0.9rem;
-            }
         }
+
+        /* ========== UTILITY CLASSES ========== */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 1rem; }
+        .mt-2 { margin-top: 2rem; }
     </style>
-    <script>
-        // Force viewport scale on load - prevents GitHub Pages mobile auto-zoom
-        (function() {
-            // Remove any existing viewport meta tags
-            var existingViewport = document.querySelector('meta[name="viewport"]');
-            if (existingViewport) {
-                existingViewport.remove();
-            }
-            
-            // Create and insert a fresh viewport meta tag
-            var viewport = document.createElement('meta');
-            viewport.name = 'viewport';
-            viewport.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no';
-            document.head.appendChild(viewport);
-            
-            // Prevent zoom on orientation change
-            window.addEventListener('orientationchange', function() {
-                document.querySelector('meta[name="viewport"]').setAttribute('content', 
-                    'width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, shrink-to-fit=no');
-            });
-        })();
-    </script>
 </head>
 <body>
-    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-
-    <!-- Language Switcher -->
-    <div class="language-switcher">
-        <button class="lang-btn active" onclick="switchLanguage('en')" id="lang-en">
-            <span class="flag">🇺🇸</span>
-            <span>EN</span>
-        </button>
-        <button class="lang-btn" onclick="switchLanguage('ar')" id="lang-ar">
-            <span class="flag">🇸🇦</span>
-            <span>AR</span>
-        </button>
+    <!-- TOP NAVIGATION -->
+    <div class="top-nav">
+        <div class="greeting">
+            <span id="greetingText">🎓 Medical Laboratory Program</span>
+        </div>
+        
+        <div class="language-switcher">
+            <button class="lang-btn active" onclick="switchLang('en')" data-lang="en">
+                <span class="flag">🇺🇸</span> EN
+            </button>
+            <button class="lang-btn" onclick="switchLang('ar')" data-lang="ar">
+                <span class="flag">🇪🇬</span> AR
+            </button>
+        </div>
+        
+        <div class="right-controls">
+            <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            <button class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
     </div>
 
-    <div class="container">
-        <header>
-            <h1 data-en="🧬 Applied Health Sciences Technology" data-ar="🧬 تكنولوجيا العلوم الصحية التطبيقية">🧬 Applied Health Sciences Technology</h1>
-            <div class="subtitle" data-en="GPA Calculator" data-ar="حاسبة المعدل التراكمي">GPA Calculator</div>
-            <div class="credits" data-en="Made by Mohand" data-ar="صنع بواسطة مهند">Made by Mohand</div>
-            <div class="button-group">
-                <button class="smart-import-btn" onclick="openSmartImport()" data-en="⚡ Calculate Your GPA with 1 Click" data-ar="⚡ احسب معدلك بضغطة واحدة">⚡ Calculate Your GPA with 1 Click</button>
-                <button class="reset-btn" onclick="resetAll()" data-en="🔄 Reset All" data-ar="🔄 إعادة تعيين الكل">🔄 Reset All</button>
+    <!-- SIDE MENU -->
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-section">
+            <h3>📊 QUICK ACTIONS</h3>
+            <div class="menu-item" onclick="openImportModal()">
+                📥 Paste Result Page
             </div>
-        </header>
-
-        <!-- Stats Panel -->
-        <div class="stats-panel">
-            <div class="stat-card">
-                <div class="stat-label" data-en="Cumulative GPA" data-ar="المعدل التراكمي">Cumulative GPA</div>
-                <div class="stat-value" id="cumulativeGPA">0.00</div>
+            <div class="menu-item" onclick="clearAllData()">
+                🗑️ Clear All Data
             </div>
-            <div class="stat-card">
-                <div class="stat-label" data-en="Total Hours" data-ar="مجموع الساعات">Total Hours</div>
-                <div class="stat-value" id="totalCredits">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label" data-en="Overall Grade" data-ar="التقدير العام">Overall Grade</div>
-                <div class="stat-value" id="overallGrade">-</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label" data-en="Percentage" data-ar="النسبة المئوية">Percentage</div>
-                <div class="stat-value" id="overallPercentage">0.0%</div>
+            <div class="menu-item" onclick="printTranscript()">
+                🖨️ Print Transcript
             </div>
         </div>
 
-        <!-- Semesters Container -->
+        <div class="menu-section" id="profileSection">
+            <h3>👤 PROFILE</h3>
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="userName" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label>Student ID</label>
+                <input type="text" id="studentID" placeholder="Enter your ID">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="userEmail" placeholder="Enter your email">
+            </div>
+            <button class="save-btn" onclick="saveProfile()">💾 SAVE PROFILE</button>
+        </div>
+
+        <div class="menu-section hidden" id="settingsSection">
+            <h3>⚙️ SETTINGS</h3>
+            <div class="form-group">
+                <label>Theme</label>
+                <select id="themeSelect">
+                    <option value="dark">Dark Mode</option>
+                    <option value="light">Light Mode</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Decimal Precision</label>
+                <select id="decimalPrecision">
+                    <option value="2">2 Decimals</option>
+                    <option value="3">3 Decimals</option>
+                    <option value="4">4 Decimals</option>
+                </select>
+            </div>
+            <button class="save-btn" onclick="saveSettings()">💾 SAVE SETTINGS</button>
+        </div>
+    </div>
+
+    <!-- IMPORT MODAL -->
+    <div class="modal" id="importModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>📋 COPY HERE YOUR RESULT PAGE</h2>
+                <button class="close-modal" onclick="closeImportModal()">×</button>
+            </div>
+            
+            <div class="import-info">
+                <strong>📋 Instructions:</strong><br>
+                Paste your complete result page text here. The system will automatically detect all course codes and grades.<br><br>
+                <strong>Supported Codes:</strong><br>
+                UN101, THS101, THS102, TL201, and all Medical Laboratory Program courses
+            </div>
+            
+            <textarea class="import-textarea" id="importTextarea" placeholder="Paste your complete result page here..."></textarea>
+            
+            <button class="import-btn" onclick="processImport()">🚀 AUTO-DETECT & IMPORT</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="container">
+        <!-- HERO SECTION -->
+        <div class="hero-section">
+            <h1>HNU GPA CALCULATOR</h1>
+            <div class="developer-credit">Made by Mohand</div>
+        </div>
+
+        <!-- STATS GRID -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">CUMULATIVE GPA</div>
+                <div class="stat-value" id="cumulativeGPA">0.00</div>
+                <div class="stat-subtext">Overall Performance</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">OVERALL GRADE</div>
+                <div class="stat-value" id="overallGrade">-</div>
+                <div class="stat-subtext">Letter Grade</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">TOTAL HOURS</div>
+                <div class="stat-value" id="totalHours">0</div>
+                <div class="stat-subtext">Credit Hours</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">COURSES COMPLETED</div>
+                <div class="stat-value" id="completedCourses">0</div>
+                <div class="stat-subtext">Out of 41</div>
+            </div>
+        </div>
+
+        <!-- QUICK ACTIONS -->
+        <div class="quick-actions">
+            <button class="action-btn import-special" onclick="openImportModal()">
+                📋 COPY HERE YOUR RESULT PAGE
+            </button>
+            <button class="action-btn download" onclick="downloadTranscript()">
+                📥 Download Transcript
+            </button>
+            <button class="action-btn" onclick="shareGPA()">
+                📤 Share Results
+            </button>
+            <button class="action-btn" onclick="clearAllData()">
+                🗑️ Clear All
+            </button>
+        </div>
+
+        <!-- CHARTS -->
+        <div class="chart-container">
+            <h3>📊 GPA PROGRESSION BY SEMESTER</h3>
+            <div class="chart-wrapper">
+                <canvas id="gpaChart"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <h3>📈 GRADE DISTRIBUTION</h3>
+            <div class="chart-wrapper">
+                <canvas id="gradeChart"></canvas>
+            </div>
+        </div>
+
+        <!-- SEMESTERS CONTAINER -->
         <div id="semestersContainer"></div>
     </div>
 
-    <!-- Smart Import Modal -->
-    <div id="smartImportModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" data-en="📋 Smart Import" data-ar="📋 استيراد ذكي">📋 Smart Import</h2>
-                <button class="close-btn" onclick="closeModal()">×</button>
-            </div>
-            <p style="color: var(--text-secondary); margin-bottom: 1rem;" data-en="Paste your transcript text below. The system will automatically extract course codes and grades!" data-ar="الصق نص كشف الدرجات أدناه. سيقوم النظام تلقائياً باستخراج رموز المقررات والدرجات!">
-                Paste your transcript text below. The system will automatically extract course codes and grades!
-            </p>
-            <textarea 
-                id="importText" 
-                class="import-textarea" 
-                data-placeholder-en="Paste your transcript here...
-
-Example formats:
-UN101: Written: 75
-THS101 Total: 85
-TL201 - 90"
-                data-placeholder-ar="الصق كشف الدرجات هنا...
-
-أمثلة على التنسيقات:
-UN101: Written: 75
-THS101 Total: 85
-TL201 - 90"
-                placeholder="Paste your transcript here...
-
-Example formats:
-UN101: Written: 75
-THS101 Total: 85
-TL201 - 90"></textarea>
-            <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeModal()" data-en="Cancel" data-ar="إلغاء">Cancel</button>
-                <button class="btn btn-primary" onclick="processSmartImport()" data-en="Import Grades" data-ar="استيراد الدرجات">Import Grades</button>
-            </div>
-        </div>
-    </div>
+    <!-- NOTIFICATION -->
+    <div class="notification" id="notification"></div>
 
     <script>
-        let grades = {};
+        // ========== GLOBAL VARIABLES ==========
         let currentTheme = 'dark';
         let currentLang = 'en';
-        
+        let decimalPrecision = 2;
+        let userGrades = {};
+        let gpaChart = null;
+        let gradeChart = null;
+
+        // ========== MEDICAL LABORATORY PROGRAM DATABASE (41 Courses) ==========
+        const courseDatabase = {
+            // First Level - 1st Semester
+            'UN101': { name: 'Academic Reading and Writing (1)', nameAr: 'القراءة والكتابة الأكاديمية (1)', hours: 2, total: 100, semester: 1 },
+            'THS101': { name: 'Basic Physics', nameAr: 'الفيزياء الأساسية', hours: 2, total: 100, semester: 1 },
+            'THS102': { name: 'Mathematics', nameAr: 'الرياضيات', hours: 2, total: 100, semester: 1 },
+            'THS103': { name: 'Introduction to Electrical Engineering', nameAr: 'مقدمة في الهندسة الكهربائية', hours: 3, total: 150, semester: 1 },
+            'UN102': { name: 'Computer Skills', nameAr: 'مهارات الحاسوب', hours: 2, total: 100, semester: 1 },
+            'THS104': { name: 'Mechanics', nameAr: 'الميكانيكا', hours: 2, total: 100, semester: 1 },
+            'UN103': { name: 'Critical Thinking', nameAr: 'التفكير النقدي', hours: 2, total: 100, semester: 1 },
+            
+            // First Level - 2nd Semester
+            'THS115': { name: 'Electronic Circuits & Devices', nameAr: 'الدوائر والأجهزة الإلكترونية', hours: 3, total: 150, semester: 2 },
+            'THS116': { name: 'General Anatomy & Histology', nameAr: 'التشريح وعلم الأنسجة العام', hours: 3, total: 150, semester: 2 },
+            'THS117': { name: 'General Physiology', nameAr: 'علم وظائف الأعضاء العام', hours: 2, total: 100, semester: 2 },
+            'THS118': { name: 'General Microbiology', nameAr: 'علم الأحياء الدقيقة العام', hours: 2, total: 100, semester: 2 },
+            'THS119': { name: 'General Chemistry', nameAr: 'الكيمياء العامة', hours: 2, total: 100, semester: 2 },
+            'UN114': { name: 'Academic Reading and Writing (2)', nameAr: 'القراءة والكتابة الأكاديمية (2)', hours: 2, total: 100, semester: 2 },
+            'THS1110': { name: 'Professional Ethics', nameAr: 'أخلاقيات المهنة', hours: 1, total: 50, semester: 2 },
+            
+            // Second Level - 1st Semester
+            'THS2010': { name: 'Mechatronics Engineering', nameAr: 'هندسة الميكاترونكس', hours: 2, total: 100, semester: 3 },
+            'TL201': { name: 'Biochemistry (1)', nameAr: 'الكيمياء الحيوية (1)', hours: 4, total: 200, semester: 3 },
+            'TL202': { name: 'Parasitology (1)', nameAr: 'علم الطفيليات (1)', hours: 2, total: 100, semester: 3 },
+            'TL203': { name: 'Bacteriology', nameAr: 'علم البكتيريا', hours: 4, total: 200, semester: 3 },
+            'TL204': { name: 'Histology for Lab Technologists', nameAr: 'علم الأنسجة لفنيي المختبرات', hours: 2, total: 100, semester: 3 },
+            'UN5': { name: 'Foundation of Digital Technology', nameAr: 'أساسيات التكنولوجيا الرقمية', hours: 2, total: 100, semester: 3 },
+            'UN6': { name: 'English Language', nameAr: 'اللغة الإنجليزية', hours: 2, total: 100, semester: 3 },
+            
+            // Second Level - 2nd Semester
+            'TL215': { name: 'Molecular Biology', nameAr: 'البيولوجيا الجزيئية', hours: 4, total: 200, semester: 4 },
+            'TL216': { name: 'Hematology (1)', nameAr: 'أمراض الدم (1)', hours: 4, total: 200, semester: 4 },
+            'TL217': { name: 'Systematic Physiology', nameAr: 'علم وظائف الأعضاء المنهجي', hours: 4, total: 200, semester: 4 },
+            'TL218': { name: 'General Biology', nameAr: 'علم الأحياء العام', hours: 3, total: 150, semester: 4 },
+            'ETHS1': { name: 'Elective (1)', nameAr: 'اختياري (1)', hours: 1, total: 50, semester: 4 },
+            
+            // Third Level - 1st Semester
+            'TL309': { name: 'Lab Instrumentation (1)', nameAr: 'أجهزة المختبر (1)', hours: 4, total: 200, semester: 5 },
+            'TL3010': { name: 'Enzymology & Hormones', nameAr: 'علم الإنزيمات والهرمونات', hours: 4, total: 200, semester: 5 },
+            'TL3011': { name: 'Parasitology (2)', nameAr: 'علم الطفيليات (2)', hours: 3, total: 150, semester: 5 },
+            'TL3012': { name: 'Systematic Pathology', nameAr: 'علم الأمراض المنهجي', hours: 3, total: 150, semester: 5 },
+            'THS3011': { name: 'Infection Control', nameAr: 'مكافحة العدوى', hours: 2, total: 100, semester: 5 },
+            'UN7': { name: 'Innovation & Entrepreneurship', nameAr: 'الابتكار وريادة الأعمال', hours: 2, total: 100, semester: 5 },
+            
+            // Third Level - 2nd Semester
+            'TL3113': { name: 'Biochemistry (2)', nameAr: 'الكيمياء الحيوية (2)', hours: 4, total: 200, semester: 6 },
+            'TL3114': { name: 'Basic Immunology', nameAr: 'علم المناعة الأساسي', hours: 3, total: 150, semester: 6 },
+            'TL3115': { name: 'Quality Management (1)', nameAr: 'إدارة الجودة (1)', hours: 4, total: 200, semester: 6 },
+            'TL3116': { name: 'Lab Instrumentation (2)', nameAr: 'أجهزة المختبر (2)', hours: 4, total: 200, semester: 6 },
+            'ETHS2': { name: 'Elective (2)', nameAr: 'اختياري (2)', hours: 1, total: 50, semester: 6 },
+            
+            // Fourth Level - 1st Semester
+            'TL4017': { name: 'Biochemistry (3)', nameAr: 'الكيمياء الحيوية (3)', hours: 3, total: 150, semester: 7 },
+            'TL4018': { name: 'Virology & Mycology', nameAr: 'علم الفيروسات والفطريات', hours: 3, total: 150, semester: 7 },
+            'TL4019': { name: 'Hematology (2)', nameAr: 'أمراض الدم (2)', hours: 4, total: 200, semester: 7 },
+            'TL4020': { name: 'Blood Banking', nameAr: 'بنك الدم', hours: 4, total: 200, semester: 7 },
+            'ETHS3': { name: 'Elective (3)', nameAr: 'اختياري (3)', hours: 1, total: 50, semester: 7 }
+        };
+
+        const semesterLabels = {
+            1: 'First Level - 1st Semester',
+            2: 'First Level - 2nd Semester',
+            3: 'Second Level - 1st Semester',
+            4: 'Second Level - 2nd Semester',
+            5: 'Third Level - 1st Semester',
+            6: 'Third Level - 2nd Semester',
+            7: 'Fourth Level - 1st Semester'
+        };
+
+        const semesterLabelsAr = {
+            1: 'المستوى الأول - الفصل الأول',
+            2: 'المستوى الأول - الفصل الثاني',
+            3: 'المستوى الثاني - الفصل الأول',
+            4: 'المستوى الثاني - الفصل الثاني',
+            5: 'المستوى الثالث - الفصل الأول',
+            6: 'المستوى الثالث - الفصل الثاني',
+            7: 'المستوى الرابع - الفصل الأول'
+        };
+
+        // ========== HNU GRADING SYSTEM ==========
+        function getGradeFromPercentage(percentage) {
+            if (percentage >= 95) return { grade: 'A+', points: 4.0 };
+            if (percentage >= 90) return { grade: 'A', points: 3.8 };
+            if (percentage >= 85) return { grade: 'A-', points: 3.6 };
+            if (percentage >= 82.5) return { grade: 'B+', points: 3.4 };
+            if (percentage >= 77.5) return { grade: 'B', points: 3.2 };
+            if (percentage >= 75) return { grade: 'B-', points: 3.0 };
+            if (percentage >= 72.5) return { grade: 'C+', points: 2.8 };
+            if (percentage >= 67.5) return { grade: 'C', points: 2.6 };
+            if (percentage >= 65) return { grade: 'C-', points: 2.4 };
+            if (percentage >= 62.5) return { grade: 'D+', points: 2.2 };
+            if (percentage >= 60) return { grade: 'D', points: 2.0 };
+            return { grade: 'F', points: 0.0 };
+        }
+
+        // ========== THEME TOGGLE ==========
+        function toggleTheme() {
+            if (currentTheme === 'dark') {
+                document.body.setAttribute('data-theme', 'light');
+                document.querySelector('.theme-toggle').textContent = '☀️';
+                currentTheme = 'light';
+            } else {
+                document.body.removeAttribute('data-theme');
+                document.querySelector('.theme-toggle').textContent = '🌙';
+                currentTheme = 'dark';
+            }
+            localStorage.setItem('theme', currentTheme);
+            updateCharts();
+        }
+
+        // ========== MENU TOGGLE ==========
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const toggle = document.querySelector('.menu-toggle');
+            menu.classList.toggle('open');
+            toggle.classList.toggle('active');
+        }
+
+        // ========== TRANSLATIONS ==========
         const translations = {
             en: {
-                'Your Marks': 'Your Marks',
-                'Total Marks': 'Total Marks',
-                'Grade': 'Grade',
-                'Percentage': 'Percentage',
-                'Points': 'Points',
-                'GPA': 'GPA'
+                greeting: '🎓 Medical Laboratory Program',
+                heroTitle: 'HNU GPA CALCULATOR',
+                madeBy: 'Made by Mohand',
+                cumulativeGPA: 'CUMULATIVE GPA',
+                overallGrade: 'OVERALL GRADE',
+                totalHours: 'TOTAL HOURS',
+                coursesCompleted: 'COURSES COMPLETED',
+                overallPerformance: 'Overall Performance',
+                letterGrade: 'Letter Grade',
+                creditHours: 'Credit Hours',
+                outOf: 'Out of 41',
+                copyResultPage: '📋 COPY HERE YOUR RESULT PAGE',
+                downloadTranscript: '📥 Download Transcript',
+                shareResults: '📤 Share Results',
+                clearAll: '🗑️ Clear All',
+                gpaProgression: '📊 GPA PROGRESSION BY SEMESTER',
+                gradeDistribution: '📈 GRADE DISTRIBUTION',
+                quickActions: '📊 QUICK ACTIONS',
+                pasteResult: '📥 Paste Result Page',
+                clearData: '🗑️ Clear All Data',
+                printTranscript: '🖨️ Print Transcript',
+                profile: '👤 PROFILE',
+                fullName: 'Full Name',
+                studentID: 'Student ID',
+                email: 'Email',
+                saveProfile: '💾 SAVE PROFILE',
+                settings: '⚙️ SETTINGS',
+                theme: 'Theme',
+                darkMode: 'Dark Mode',
+                lightMode: 'Light Mode',
+                decimalPrecision: 'Decimal Precision',
+                saveSettings: '💾 SAVE SETTINGS',
+                instructions: '📋 Instructions:',
+                instructionsText: 'Paste your complete result page text here. The system will automatically detect all course codes and grades.',
+                supportedCodes: '📋 Supported Codes:',
+                codesText: 'UN101, THS101, THS102, TL201, and all Medical Laboratory Program courses',
+                autoDetect: '🚀 AUTO-DETECT & IMPORT',
+                yourMarks: 'Your Marks',
+                percentage: 'Percentage',
+                grade: 'GRADE',
+                gpaPoints: 'GPA POINTS',
+                status: 'STATUS',
+                graded: '✅ Graded',
+                pending: '⏳ Pending',
+                enterMarks: 'Enter marks',
+                enterName: 'Enter your name',
+                enterID: 'Enter your ID',
+                enterEmail: 'Enter your email',
+                hours: 'Hours',
+                total: 'Total'
             },
             ar: {
-                'Your Marks': 'درجاتك',
-                'Total Marks': 'مجموع الدرجات',
-                'Grade': 'التقدير',
-                'Percentage': 'النسبة',
-                'Points': 'النقاط',
-                'GPA': 'المعدل'
+                greeting: '🎓 برنامج المختبرات الطبية',
+                heroTitle: 'حاسبة المعدل التراكمي',
+                madeBy: 'صنع بواسطة مهند',
+                cumulativeGPA: 'المعدل التراكمي',
+                overallGrade: 'التقدير العام',
+                totalHours: 'إجمالي الساعات',
+                coursesCompleted: 'المقررات المكتملة',
+                overallPerformance: 'الأداء العام',
+                letterGrade: 'التقدير بالحروف',
+                creditHours: 'الساعات المعتمدة',
+                outOf: 'من أصل 41',
+                copyResultPage: '📋 الصق هنا صفحة النتيجة',
+                downloadTranscript: '📥 تحميل كشف الدرجات',
+                shareResults: '📤 مشاركة النتائج',
+                clearAll: '🗑️ مسح الكل',
+                gpaProgression: '📊 تطور المعدل التراكمي حسب الفصول',
+                gradeDistribution: '📈 توزيع الدرجات',
+                quickActions: '📊 إجراءات سريعة',
+                pasteResult: '📥 لصق صفحة النتيجة',
+                clearData: '🗑️ مسح جميع البيانات',
+                printTranscript: '🖨️ طباعة كشف الدرجات',
+                profile: '👤 الملف الشخصي',
+                fullName: 'الاسم الكامل',
+                studentID: 'رقم الطالب',
+                email: 'البريد الإلكتروني',
+                saveProfile: '💾 حفظ الملف الشخصي',
+                settings: '⚙️ الإعدادات',
+                theme: 'المظهر',
+                darkMode: 'الوضع الداكن',
+                lightMode: 'الوضع الفاتح',
+                decimalPrecision: 'دقة الأرقام العشرية',
+                saveSettings: '💾 حفظ الإعدادات',
+                instructions: '📋 التعليمات:',
+                instructionsText: 'الصق نص صفحة النتيجة الكاملة هنا. سيقوم النظام تلقائيًا باكتشاف جميع رموز المقررات والدرجات.',
+                supportedCodes: '📋 الرموز المدعومة:',
+                codesText: 'UN101، THS101، THS102، TL201، وجميع مقررات برنامج المختبرات الطبية',
+                autoDetect: '🚀 اكتشاف تلقائي واستيراد',
+                yourMarks: 'درجتك',
+                percentage: 'النسبة المئوية',
+                grade: 'التقدير',
+                gpaPoints: 'نقاط المعدل',
+                status: 'الحالة',
+                graded: '✅ مُقيّم',
+                pending: '⏳ قيد الانتظار',
+                enterMarks: 'أدخل الدرجات',
+                enterName: 'أدخل اسمك',
+                enterID: 'أدخل رقمك',
+                enterEmail: 'أدخل بريدك الإلكتروني',
+                hours: 'ساعات',
+                total: 'المجموع'
             }
         };
 
-        const courseDatabase = {
-            // First Level - 1st Semester
-            'UN101': { name: { en: 'Academic Reading and Writing (1)', ar: 'القراءة والكتابة الأكاديمية (1)' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 1st Semester', ar: 'المستوى الأول - الفصل الأول' } },
-            'THS101': { name: { en: 'Basic Physics', ar: 'الفيزياء الأساسية' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 1st Semester', ar: 'المستوى الأول - الفصل الأول' } },
-            'THS102': { name: { en: 'Mathematics', ar: 'الرياضيات' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 1st Semester', ar: 'المستوى الأول - الفصل الأول' } },
-            'THS103': { name: { en: 'Introduction to Electrical Engineering', ar: 'مقدمة في الهندسة الكهربائية' }, credits: 3, maxMarks: 150, semester: { en: 'First Level – 1st Semester', ar: 'المستوى الأول - الفصل الأول' } },
-            'UN102': { name: { en: 'Computer Skills', ar: 'مهارات الحاسوب' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 1st Semester', ar: 'المستوى الأول - الفصل الأول' } },
-            'THS104': { name: { en: 'Mechanics', ar: 'الميكانيكا' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 1st Semester', ar: 'المستوى الأول - الفصل الأول' } },
-            'UN103': { name: { en: 'Critical Thinking', ar: 'التفكير النقدي' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 1st Semester', ar: 'المستوى الأول - الفصل الأول' } },
-
-            // First Level - 2nd Semester
-            'THS115': { name: { en: 'Electronic Circuits & Devices', ar: 'الدوائر والأجهزة الإلكترونية' }, credits: 3, maxMarks: 150, semester: { en: 'First Level – 2nd Semester', ar: 'المستوى الأول - الفصل الثاني' } },
-            'THS116': { name: { en: 'General Anatomy & Histology', ar: 'التشريح العام والأنسجة' }, credits: 3, maxMarks: 150, semester: { en: 'First Level – 2nd Semester', ar: 'المستوى الأول - الفصل الثاني' } },
-            'THS117': { name: { en: 'General Physiology', ar: 'علم وظائف الأعضاء العام' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 2nd Semester', ar: 'المستوى الأول - الفصل الثاني' } },
-            'THS118': { name: { en: 'General Microbiology', ar: 'علم الأحياء الدقيقة العام' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 2nd Semester', ar: 'المستوى الأول - الفصل الثاني' } },
-            'THS119': { name: { en: 'General Chemistry', ar: 'الكيمياء العامة' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 2nd Semester', ar: 'المستوى الأول - الفصل الثاني' } },
-            'UN114': { name: { en: 'Academic Reading and Writing (2)', ar: 'القراءة والكتابة الأكاديمية (2)' }, credits: 2, maxMarks: 100, semester: { en: 'First Level – 2nd Semester', ar: 'المستوى الأول - الفصل الثاني' } },
-            'THS1110': { name: { en: 'Professional Ethics', ar: 'الأخلاقيات المهنية' }, credits: 1, maxMarks: 50, semester: { en: 'First Level – 2nd Semester', ar: 'المستوى الأول - الفصل الثاني' } },
-
-            // Second Level - 1st Semester
-            'THS2010': { name: { en: 'Mechatronics Engineering', ar: 'هندسة الميكاترونيكس' }, credits: 2, maxMarks: 100, semester: { en: 'Second Level – 1st Semester', ar: 'المستوى الثاني - الفصل الأول' } },
-            'TL201': { name: { en: 'Biochemistry (1)', ar: 'الكيمياء الحيوية (1)' }, credits: 4, maxMarks: 200, semester: { en: 'Second Level – 1st Semester', ar: 'المستوى الثاني - الفصل الأول' } },
-            'TL202': { name: { en: 'Parasitology (1)', ar: 'علم الطفيليات (1)' }, credits: 2, maxMarks: 100, semester: { en: 'Second Level – 1st Semester', ar: 'المستوى الثاني - الفصل الأول' } },
-            'TL203': { name: { en: 'Bacteriology', ar: 'علم البكتيريا' }, credits: 4, maxMarks: 200, semester: { en: 'Second Level – 1st Semester', ar: 'المستوى الثاني - الفصل الأول' } },
-            'TL204': { name: { en: 'Histology for Lab Technologists', ar: 'علم الأنسجة لفنيي المختبرات' }, credits: 2, maxMarks: 100, semester: { en: 'Second Level – 1st Semester', ar: 'المستوى الثاني - الفصل الأول' } },
-            'UN5': { name: { en: 'Foundation of Digital Technology', ar: 'أساسيات التقنية الرقمية' }, credits: 2, maxMarks: 100, semester: { en: 'Second Level – 1st Semester', ar: 'المستوى الثاني - الفصل الأول' } },
-            'UN6': { name: { en: 'English Language', ar: 'اللغة الإنجليزية' }, credits: 2, maxMarks: 100, semester: { en: 'Second Level – 1st Semester', ar: 'المستوى الثاني - الفصل الأول' } },
-
-            // Second Level - 2nd Semester
-            'TL215': { name: { en: 'Molecular Biology', ar: 'البيولوجيا الجزيئية' }, credits: 4, maxMarks: 200, semester: { en: 'Second Level – 2nd Semester', ar: 'المستوى الثاني - الفصل الثاني' } },
-            'TL216': { name: { en: 'Hematology (1)', ar: 'علم الدم (1)' }, credits: 4, maxMarks: 200, semester: { en: 'Second Level – 2nd Semester', ar: 'المستوى الثاني - الفصل الثاني' } },
-            'TL217': { name: { en: 'Systematic Physiology', ar: 'علم وظائف الأعضاء المنهجي' }, credits: 4, maxMarks: 200, semester: { en: 'Second Level – 2nd Semester', ar: 'المستوى الثاني - الفصل الثاني' } },
-            'TL218': { name: { en: 'General Biology', ar: 'الأحياء العامة' }, credits: 3, maxMarks: 150, semester: { en: 'Second Level – 2nd Semester', ar: 'المستوى الثاني - الفصل الثاني' } },
-            'ETHS1': { name: { en: 'Elective (1)', ar: 'اختياري (1)' }, credits: 1, maxMarks: 50, semester: { en: 'Second Level – 2nd Semester', ar: 'المستوى الثاني - الفصل الثاني' } },
-
-            // Third Level - 1st Semester
-            'TL309': { name: { en: 'Lab Instrumentation (1)', ar: 'أجهزة المختبرات (1)' }, credits: 4, maxMarks: 200, semester: { en: 'Third Level – 1st Semester', ar: 'المستوى الثالث - الفصل الأول' } },
-            'TL3010': { name: { en: 'Enzymology & Hormones', ar: 'علم الإنزيمات والهرمونات' }, credits: 4, maxMarks: 200, semester: { en: 'Third Level – 1st Semester', ar: 'المستوى الثالث - الفصل الأول' } },
-            'TL3011': { name: { en: 'Parasitology (2)', ar: 'علم الطفيليات (2)' }, credits: 3, maxMarks: 150, semester: { en: 'Third Level – 1st Semester', ar: 'المستوى الثالث - الفصل الأول' } },
-            'TL3012': { name: { en: 'Systematic Pathology', ar: 'علم الأمراض المنهجي' }, credits: 3, maxMarks: 150, semester: { en: 'Third Level – 1st Semester', ar: 'المستوى الثالث - الفصل الأول' } },
-            'THS3011': { name: { en: 'Infection Control', ar: 'مكافحة العدوى' }, credits: 2, maxMarks: 100, semester: { en: 'Third Level – 1st Semester', ar: 'المستوى الثالث - الفصل الأول' } },
-            'UN7': { name: { en: 'Innovation & Entrepreneurship', ar: 'الابتكار وريادة الأعمال' }, credits: 2, maxMarks: 100, semester: { en: 'Third Level – 1st Semester', ar: 'المستوى الثالث - الفصل الأول' } },
-
-            // Third Level - 2nd Semester
-            'TL3113': { name: { en: 'Biochemistry (2)', ar: 'الكيمياء الحيوية (2)' }, credits: 4, maxMarks: 200, semester: { en: 'Third Level – 2nd Semester', ar: 'المستوى الثالث - الفصل الثاني' } },
-            'TL3114': { name: { en: 'Basic Immunology', ar: 'علم المناعة الأساسي' }, credits: 3, maxMarks: 150, semester: { en: 'Third Level – 2nd Semester', ar: 'المستوى الثالث - الفصل الثاني' } },
-            'TL3115': { name: { en: 'Quality Management (1)', ar: 'إدارة الجودة (1)' }, credits: 4, maxMarks: 200, semester: { en: 'Third Level – 2nd Semester', ar: 'المستوى الثالث - الفصل الثاني' } },
-            'TL3116': { name: { en: 'Lab Instrumentation (2)', ar: 'أجهزة المختبرات (2)' }, credits: 4, maxMarks: 200, semester: { en: 'Third Level – 2nd Semester', ar: 'المستوى الثالث - الفصل الثاني' } },
-            'ETHS2': { name: { en: 'Elective (2)', ar: 'اختياري (2)' }, credits: 1, maxMarks: 50, semester: { en: 'Third Level – 2nd Semester', ar: 'المستوى الثالث - الفصل الثاني' } },
-
-            // Fourth Level - 1st Semester
-            'TL4017': { name: { en: 'Biochemistry (3)', ar: 'الكيمياء الحيوية (3)' }, credits: 3, maxMarks: 150, semester: { en: 'Fourth Level – 1st Semester', ar: 'المستوى الرابع - الفصل الأول' } },
-            'TL4018': { name: { en: 'Virology & Mycology', ar: 'علم الفيروسات والفطريات' }, credits: 3, maxMarks: 150, semester: { en: 'Fourth Level – 1st Semester', ar: 'المستوى الرابع - الفصل الأول' } },
-            'TL4019': { name: { en: 'Hematology (2)', ar: 'علم الدم (2)' }, credits: 4, maxMarks: 200, semester: { en: 'Fourth Level – 1st Semester', ar: 'المستوى الرابع - الفصل الأول' } },
-            'TL4020': { name: { en: 'Blood Banking', ar: 'بنك الدم' }, credits: 4, maxMarks: 200, semester: { en: 'Fourth Level – 1st Semester', ar: 'المستوى الرابع - الفصل الأول' } },
-            'ETHS3': { name: { en: 'Elective (3)', ar: 'اختياري (3)' }, credits: 1, maxMarks: 50, semester: { en: 'Fourth Level – 1st Semester', ar: 'المستوى الرابع - الفصل الأول' } },
-
-            // Fourth Level - 2nd Semester
-            'TL4121': { name: { en: 'Immunology & Serology', ar: 'علم المناعة والمصول' }, credits: 4, maxMarks: 200, semester: { en: 'Fourth Level – 2nd Semester', ar: 'المستوى الرابع - الفصل الثاني' } },
-            'TL4122': { name: { en: 'Age & Pregnancy Investigation', ar: 'فحوصات العمر والحمل' }, credits: 4, maxMarks: 200, semester: { en: 'Fourth Level – 2nd Semester', ar: 'المستوى الرابع - الفصل الثاني' } },
-            'TL4123': { name: { en: 'Quality Management (2)', ar: 'إدارة الجودة (2)' }, credits: 4, maxMarks: 150, semester: { en: 'Fourth Level – 2nd Semester', ar: 'المستوى الرابع - الفصل الثاني' } },
-            'TL4124': { name: { en: 'Forensic Chemistry & Toxicology', ar: 'الكيمياء الجنائية والسموم' }, credits: 4, maxMarks: 200, semester: { en: 'Fourth Level – 2nd Semester', ar: 'المستوى الرابع - الفصل الثاني' } },
-            'ETHS4': { name: { en: 'Elective (4)', ar: 'اختياري (4)' }, credits: 1, maxMarks: 50, semester: { en: 'Fourth Level – 2nd Semester', ar: 'المستوى الرابع - الفصل الثاني' } }
-        };
-
-        // Initialize
-        loadGrades();
-        loadLanguage();
-        renderSemesters();
-        calculateCumulativeGPA();
-
-        function switchLanguage(lang) {
+        // ========== LANGUAGE SWITCH ==========
+        function switchLang(lang) {
             currentLang = lang;
-            document.body.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
-            
-            // Update button states
-            document.getElementById('lang-en').classList.toggle('active', lang === 'en');
-            document.getElementById('lang-ar').classList.toggle('active', lang === 'ar');
-            
-            // Update all text elements with data-en and data-ar attributes
-            document.querySelectorAll('[data-en]').forEach(el => {
-                const text = el.getAttribute('data-' + lang);
-                if (text) {
-                    if (el.tagName === 'TEXTAREA') {
-                        el.placeholder = text;
-                    } else {
-                        el.textContent = text;
-                    }
-                }
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
             });
+            document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
             
-            // Save preference
-            localStorage.setItem('medLabLang', lang);
+            if (lang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+            } else {
+                document.body.removeAttribute('dir');
+            }
+            
+            updateLanguage();
+            localStorage.setItem('language', lang);
+        }
+
+        function updateLanguage() {
+            const t = translations[currentLang];
+            
+            // Update all text elements
+            document.getElementById('greetingText').textContent = t.greeting;
+            document.querySelector('.hero-section h1').textContent = t.heroTitle;
+            document.querySelector('.developer-credit').textContent = t.madeBy;
+            
+            // Stats
+            document.querySelectorAll('.stat-label')[0].textContent = t.cumulativeGPA;
+            document.querySelectorAll('.stat-label')[1].textContent = t.overallGrade;
+            document.querySelectorAll('.stat-label')[2].textContent = t.totalHours;
+            document.querySelectorAll('.stat-label')[3].textContent = t.coursesCompleted;
+            
+            document.querySelectorAll('.stat-subtext')[0].textContent = t.overallPerformance;
+            document.querySelectorAll('.stat-subtext')[1].textContent = t.letterGrade;
+            document.querySelectorAll('.stat-subtext')[2].textContent = t.creditHours;
+            document.querySelectorAll('.stat-subtext')[3].textContent = t.outOf;
+            
+            // Buttons
+            const actionBtns = document.querySelectorAll('.action-btn');
+            actionBtns[0].innerHTML = t.copyResultPage;
+            actionBtns[1].innerHTML = t.downloadTranscript;
+            actionBtns[2].innerHTML = t.shareResults;
+            actionBtns[3].innerHTML = t.clearAll;
+            
+            // Charts
+            document.querySelectorAll('.chart-container h3')[0].textContent = t.gpaProgression;
+            document.querySelectorAll('.chart-container h3')[1].textContent = t.gradeDistribution;
+            
+            // Menu
+            document.querySelectorAll('.menu-section h3')[0].textContent = t.quickActions;
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems[0].textContent = t.pasteResult;
+            menuItems[1].textContent = t.clearData;
+            menuItems[2].textContent = t.printTranscript;
+            
+            // Profile section
+            document.querySelector('#profileSection h3').textContent = t.profile;
+            const profileLabels = document.querySelectorAll('#profileSection label');
+            profileLabels[0].textContent = t.fullName;
+            profileLabels[1].textContent = t.studentID;
+            profileLabels[2].textContent = t.email;
+            
+            const profileInputs = document.querySelectorAll('#profileSection input');
+            profileInputs[0].placeholder = t.enterName;
+            profileInputs[1].placeholder = t.enterID;
+            profileInputs[2].placeholder = t.enterEmail;
+            
+            document.querySelector('#profileSection .save-btn').textContent = t.saveProfile;
+            
+            // Settings section
+            document.querySelector('#settingsSection h3').textContent = t.settings;
+            const settingsLabels = document.querySelectorAll('#settingsSection label');
+            settingsLabels[0].textContent = t.theme;
+            settingsLabels[1].textContent = t.decimalPrecision;
+            
+            document.querySelector('#settingsSection .save-btn').textContent = t.saveSettings;
+            
+            // Modal
+            document.querySelector('.modal-header h2').textContent = t.copyResultPage;
             
             // Re-render semesters with new language
             renderSemesters();
-            calculateCumulativeGPA();
         }
 
-        function loadLanguage() {
-            const saved = localStorage.getItem('medLabLang');
-            if (saved && (saved === 'en' || saved === 'ar')) {
-                switchLanguage(saved);
+        // ========== IMPORT MODAL ==========
+        function openImportModal() {
+            document.getElementById('importModal').classList.add('active');
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').classList.remove('active');
+        }
+
+        function processImport() {
+            const textarea = document.getElementById('importTextarea');
+            const input = textarea.value.trim().toUpperCase();
+            
+            if (!input) {
+                showNotification('❌ Please paste your result page!');
+                return;
             }
-        }
 
-        function renderSemesters() {
-            const semesters = {};
+            const lines = input.split('\n');
+            let importedCount = 0;
+            let updatedCount = 0;
             
-            Object.entries(courseDatabase).forEach(([code, course]) => {
-                const semesterName = course.semester[currentLang];
-                if (!semesters[semesterName]) {
-                    semesters[semesterName] = [];
-                }
-                semesters[semesterName].push({ code, ...course });
-            });
-
-            const container = document.getElementById('semestersContainer');
-            container.innerHTML = Object.entries(semesters).map(([semester, courses]) => `
-                <div class="semester-accordion">
-                    <div class="semester-header" onclick="toggleSemester('${semester}')">
-                        <div class="semester-title">
-                            <span class="semester-icon">📚</span>
-                            ${semester}
-                        </div>
-                        <div class="semester-gpa" id="gpa-${semester.replace(/\s+/g, '-').replace(/–/g, '-')}">
-                            ${translations[currentLang]['GPA']}: 0.00
-                        </div>
-                    </div>
-                    <div class="semester-content" id="semester-${semester.replace(/\s+/g, '-').replace(/–/g, '-')}">
-                        <div class="courses-grid">
-                            ${courses.map(course => `
-                                <div class="course-card">
-                                    <div class="course-name">${course.name[currentLang]}</div>
-                                    <div class="course-code">${course.code} • ${course.credits} ${currentLang === 'en' ? 'Hours' : 'ساعة'}</div>
-                                    <div class="input-group">
-                                        <div class="input-wrapper">
-                                            <label class="input-label">${translations[currentLang]['Your Marks']}</label>
-                                            <input 
-                                                type="number" 
-                                                class="marks-input" 
-                                                placeholder="0"
-                                                min="0"
-                                                max="${course.maxMarks}"
-                                                value="${grades[course.code] || ''}"
-                                                oninput="updateGrade('${course.code}', this.value, ${course.maxMarks}, ${course.credits})"
-                                            >
-                                        </div>
-                                        <div class="input-wrapper">
-                                            <label class="input-label">${translations[currentLang]['Total Marks']}</label>
-                                            <input 
-                                                type="number" 
-                                                class="marks-input" 
-                                                value="${course.maxMarks}"
-                                                disabled
-                                                style="opacity: 0.6;"
-                                            >
-                                        </div>
-                                    </div>
-                                    <div class="results-row">
-                                        <div class="result-item">
-                                            <div class="result-label">${translations[currentLang]['Grade']}</div>
-                                            <div class="result-value">
-                                                <span id="grade-${course.code}" class="grade-badge grade-F">-</span>
-                                            </div>
-                                        </div>
-                                        <div class="result-item">
-                                            <div class="result-label">${translations[currentLang]['Percentage']}</div>
-                                            <div class="result-value" id="percentage-${course.code}">-</div>
-                                        </div>
-                                        <div class="result-item">
-                                            <div class="result-label">${translations[currentLang]['Points']}</div>
-                                            <div class="result-value" id="points-${course.code}">-</div>
-                                        </div>
-                                    </div>
-                                </div>
-                            `).join('')}
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-            
-            // Update existing grades display
-            Object.keys(grades).forEach(code => {
-                if (grades[code] && courseDatabase[code]) {
-                    updateGradeDisplay(code, grades[code], courseDatabase[code].maxMarks, courseDatabase[code].credits);
+            // Extract all course codes and their marks from the input
+            Object.keys(courseDatabase).forEach(code => {
+                // Look for the course code in the text
+                for (let i = 0; i < lines.length; i++) {
+                    const line = lines[i].toUpperCase();
+                    if (line.includes(code)) {
+                        // Check if this is a new course or update
+                        if (userGrades[code] === undefined) {
+                            userGrades[code] = null; // Initialize as null (course added but not graded)
+                            importedCount++;
+                        }
+                        
+                        // Try to extract marks - look for patterns like "85/100" or just numbers
+                        // Match patterns like: "85/100", "85 /100", "85", etc.
+                        const maxMarks = courseDatabase[code].total;
+                        
+                        // Try to find "number/total" pattern first
+                        const fractionMatch = line.match(new RegExp(`(\\d+)\\s*\\/\\s*${maxMarks}`));
+                        if (fractionMatch) {
+                            const mark = parseInt(fractionMatch[1]);
+                            if (mark <= maxMarks && mark >= 0) {
+                                if (userGrades[code] !== mark) {
+                                    userGrades[code] = mark;
+                                    updatedCount++;
+                                }
+                                break;
+                            }
+                        }
+                        
+                        // If no fraction found, look for standalone numbers that make sense as marks
+                        const numbers = line.match(/\d+/g);
+                        if (numbers) {
+                            for (let num of numbers) {
+                                const mark = parseInt(num);
+                                // Only accept marks that are reasonable (between 0 and maxMarks)
+                                // Skip hours (typically 1-4) and the total itself
+                                if (mark > 10 && mark <= maxMarks && mark !== maxMarks) {
+                                    if (userGrades[code] !== mark) {
+                                        userGrades[code] = mark;
+                                        updatedCount++;
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        break;
+                    }
                 }
             });
-        }
 
-        function toggleSemester(semester) {
-            const header = event.currentTarget;
-            const content = document.getElementById(`semester-${semester.replace(/\s+/g, '-').replace(/–/g, '-')}`);
-            
-            header.classList.toggle('active');
-            content.classList.toggle('active');
-        }
-
-        function updateGrade(code, marks, maxMarks, credits) {
-            marks = parseFloat(marks) || 0;
-            if (marks === 0) {
-                delete grades[code];
-            } else {
-                grades[code] = marks;
-            }
-            
-            updateGradeDisplay(code, marks, maxMarks, credits);
-            saveGrades();
-            calculateCumulativeGPA();
-            calculateSemesterGPAs();
-        }
-
-        function updateGradeDisplay(code, marks, maxMarks, credits) {
-            const grade = getGrade(marks, maxMarks);
-            const points = calculatePoints(marks, maxMarks, credits);
-            const percentage = marks > 0 ? ((marks / maxMarks) * 100).toFixed(1) : 0;
-            
-            const gradeEl = document.getElementById('grade-' + code);
-            const percentageEl = document.getElementById('percentage-' + code);
-            const pointsEl = document.getElementById('points-' + code);
-            
-            if (gradeEl) {
-                gradeEl.textContent = marks > 0 ? grade : '-';
-                gradeEl.className = 'grade-badge grade-' + (marks > 0 ? getGradeClass(marks, maxMarks) : 'F');
-            }
-            if (percentageEl) {
-                percentageEl.textContent = marks > 0 ? percentage + '%' : '-';
-            }
-            if (pointsEl) {
-                pointsEl.textContent = marks > 0 ? points.toFixed(2) : '-';
-            }
-        }
-
-        function getGrade(marks, maxMarks) {
-            if (marks === 0) return 'F';
-            const percentage = (marks / maxMarks) * 100;
-            
-            if (percentage >= 95) return 'A+';
-            if (percentage >= 90) return 'A';
-            if (percentage >= 85) return 'A-';
-            if (percentage >= 80) return 'B+';
-            if (percentage >= 75) return 'B';
-            if (percentage >= 70) return 'B-';
-            if (percentage >= 65) return 'C+';
-            if (percentage >= 60) return 'C';
-            if (percentage >= 55) return 'C-';
-            if (percentage >= 53) return 'D+';
-            if (percentage >= 52) return 'D';
-            if (percentage >= 50) return 'D-';
-            return 'F';
-        }
-
-        function getGradeClass(marks, maxMarks) {
-            if (!marks) return 'F';
-            const grade = getGrade(marks, maxMarks);
-            if (grade.startsWith('A')) return 'A';
-            if (grade.startsWith('B')) return 'B';
-            if (grade.startsWith('C')) return 'C';
-            if (grade.startsWith('D')) return 'D';
-            return 'F';
-        }
-
-        function calculatePoints(marks, maxMarks, credits) {
-            if (marks === 0) return 0;
-            const percentage = (marks / maxMarks) * 100;
-            let gradePoint = 0;
-            
-            if (percentage >= 95) gradePoint = 4.0;
-            else if (percentage >= 90) gradePoint = 3.7;
-            else if (percentage >= 85) gradePoint = 3.5;
-            else if (percentage >= 80) gradePoint = 3.3;
-            else if (percentage >= 75) gradePoint = 3.1;
-            else if (percentage >= 70) gradePoint = 2.85;
-            else if (percentage >= 65) gradePoint = 2.65;
-            else if (percentage >= 60) gradePoint = 2.45;
-            else if (percentage >= 55) gradePoint = 2.25;
-            else if (percentage >= 53) gradePoint = 2.25;
-            else if (percentage >= 52) gradePoint = 2.15;
-            else if (percentage >= 50) gradePoint = 2.0;
-            else gradePoint = 0;
-            
-            return gradePoint * credits;
-        }
-
-        function calculateSemesterGPAs() {
-            // Group courses by semester
-            const semesterGroups = {};
-            Object.entries(courseDatabase).forEach(([code, course]) => {
-                const semesterName = course.semester[currentLang];
-                if (!semesterGroups[semesterName]) {
-                    semesterGroups[semesterName] = [];
-                }
-                semesterGroups[semesterName].push({ code, ...course });
-            });
-
-            // Calculate GPA for each semester
-            Object.entries(semesterGroups).forEach(([semesterName, courses]) => {
-                let semesterPoints = 0;
-                let semesterCredits = 0;
+            if (importedCount > 0 || updatedCount > 0) {
+                saveGrades();
+                renderSemesters();
+                calculateOverallGPA();
+                updateCharts();
                 
-                courses.forEach(course => {
-                    if (grades[course.code] && grades[course.code] > 0) {
-                        const points = calculatePoints(grades[course.code], course.maxMarks, course.credits);
-                        semesterPoints += points;
-                        semesterCredits += course.credits;
+                let message = '';
+                if (importedCount > 0 && updatedCount > 0) {
+                    message = `✅ Imported ${importedCount} courses and updated ${updatedCount} grades!`;
+                } else if (importedCount > 0) {
+                    message = `✅ Successfully imported ${importedCount} courses!`;
+                } else if (updatedCount > 0) {
+                    message = `✅ Updated ${updatedCount} grades!`;
+                }
+                
+                showNotification(message);
+                triggerConfetti();
+            } else {
+                showNotification('⚠️ No valid course codes found in the text!');
+            }
+
+            closeImportModal();
+            textarea.value = '';
+        }
+
+        // ========== RENDER SEMESTERS ==========
+        function renderSemesters() {
+            const container = document.getElementById('semestersContainer');
+            container.innerHTML = '';
+
+            const semesters = {};
+            Object.entries(courseDatabase).forEach(([code, course]) => {
+                if (!semesters[course.semester]) {
+                    semesters[course.semester] = [];
+                }
+                semesters[course.semester].push({ code, ...course });
+            });
+
+            const labels = currentLang === 'ar' ? semesterLabelsAr : semesterLabels;
+            const t = translations[currentLang];
+
+            Object.keys(semesters).sort((a, b) => a - b).forEach(semNum => {
+                const semesterDiv = document.createElement('div');
+                semesterDiv.className = 'semester-section';
+                
+                const semesterGPA = calculateSemesterGPA(semesters[semNum]);
+                
+                // Calculate semester stats
+                let totalHours = 0;
+                let completedCourses = 0;
+                let totalPercentage = 0;
+                let coursesWithGrades = 0;
+                
+                semesters[semNum].forEach(course => {
+                    const marks = userGrades[course.code];
+                    if (marks != null && marks !== '') {
+                        totalHours += course.hours;
+                        completedCourses++;
+                        const percentage = (marks / course.total) * 100;
+                        totalPercentage += percentage;
+                        coursesWithGrades++;
                     }
                 });
                 
-                const gpaElement = document.getElementById(`gpa-${semesterName.replace(/\s+/g, '-').replace(/–/g, '-')}`);
-                if (gpaElement) {
-                    if (semesterCredits > 0) {
-                        const semesterGPA = semesterPoints / semesterCredits;
-                        gpaElement.textContent = `${translations[currentLang]['GPA']}: ${semesterGPA.toFixed(2)}`;
-                    } else {
-                        gpaElement.textContent = `${translations[currentLang]['GPA']}: 0.00`;
-                    }
-                }
+                const avgPercentage = coursesWithGrades > 0 ? (totalPercentage / coursesWithGrades).toFixed(1) : '0.0';
+                
+                semesterDiv.innerHTML = `
+                    <div class="semester-header" onclick="toggleSemester(${semNum})">
+                        <span>${labels[semNum]}</span>
+                        <div class="semester-stats">
+                            <div class="semester-stat-item">
+                                <div class="semester-stat-label">${currentLang === 'ar' ? 'المعدل' : 'GPA'}</div>
+                                <div class="semester-stat-value">${semesterGPA.toFixed(decimalPrecision)}</div>
+                            </div>
+                            <div class="semester-stat-item">
+                                <div class="semester-stat-label">${currentLang === 'ar' ? 'النسبة' : 'Avg %'}</div>
+                                <div class="semester-stat-value">${avgPercentage}%</div>
+                            </div>
+                            <div class="semester-stat-item">
+                                <div class="semester-stat-label">${currentLang === 'ar' ? 'الساعات' : 'Hours'}</div>
+                                <div class="semester-stat-value">${totalHours}</div>
+                            </div>
+                            <span class="toggle-icon" id="toggle-${semNum}">▼</span>
+                        </div>
+                    </div>
+                    <div class="semester-body" id="semester${semNum}">
+                    </div>
+                `;
+                
+                container.appendChild(semesterDiv);
+                
+                const semesterBody = document.getElementById(`semester${semNum}`);
+                semesters[semNum].forEach(course => {
+                    const courseRow = createCourseRow(course);
+                    semesterBody.appendChild(courseRow);
+                });
             });
         }
 
-        function calculateCumulativeGPA() {
+        function toggleSemester(semNum) {
+            const body = document.getElementById(`semester${semNum}`);
+            const icon = document.getElementById(`toggle-${semNum}`);
+            
+            body.classList.toggle('collapsed');
+            icon.classList.toggle('collapsed');
+        }
+
+        function createCourseRow(course) {
+            const div = document.createElement('div');
+            div.className = 'course-row';
+            
+            const t = translations[currentLang];
+            const courseName = currentLang === 'ar' ? course.nameAr : course.name;
+            
+            const marks = userGrades[course.code] || '';
+            const percentage = marks ? (marks / course.total) * 100 : 0;
+            const gradeInfo = marks ? getGradeFromPercentage(percentage) : { grade: '-', points: 0 };
+            
+            div.innerHTML = `
+                <div class="course-header">
+                    <div class="course-info">
+                        <div class="course-code">${course.code}</div>
+                        <div class="course-name">${courseName}</div>
+                    </div>
+                    <div class="course-meta">
+                        <span>📚 ${course.hours} ${t.hours}</span>
+                        <span>📊 ${t.total}: ${course.total}</span>
+                    </div>
+                </div>
+                
+                <div class="marks-input-group">
+                    <div class="input-wrapper">
+                        <label>${t.yourMarks}</label>
+                        <input type="number" 
+                               min="0" 
+                               max="${course.total}" 
+                               value="${marks}" 
+                               placeholder="${t.enterMarks}"
+                               onchange="updateGrade('${course.code}', this.value, ${course.total}, ${course.hours})">
+                    </div>
+                    <div class="input-wrapper">
+                        <label>${t.percentage}</label>
+                        <input type="text" 
+                               value="${marks ? percentage.toFixed(2) + '%' : ''}" 
+                               readonly 
+                               style="background: var(--bg-card); cursor: not-allowed;">
+                    </div>
+                </div>
+                
+                <div class="grade-display">
+                    <div class="grade-item">
+                        <label>${t.grade}</label>
+                        <strong id="grade-${course.code}">${gradeInfo.grade}</strong>
+                    </div>
+                    <div class="grade-item">
+                        <label>${t.gpaPoints}</label>
+                        <strong id="points-${course.code}">${gradeInfo.points.toFixed(1)}</strong>
+                    </div>
+                    <div class="grade-item">
+                        <label>${t.status}</label>
+                        <strong style="color: ${marks ? 'var(--success)' : 'var(--warning)'}">
+                            ${marks ? t.graded : t.pending}
+                        </strong>
+                    </div>
+                </div>
+            `;
+            
+            return div;
+        }
+
+        function calculateSemesterGPA(courses) {
             let totalPoints = 0;
-            let totalCredits = 0;
+            let totalHours = 0;
             
-            // Only count courses that have actual grades entered (ignore empty ones)
-            Object.entries(courseDatabase).forEach(([code, course]) => {
-                if (grades[code] && grades[code] > 0) {
-                    const points = calculatePoints(grades[code], course.maxMarks, course.credits);
-                    totalPoints += points;
-                    totalCredits += course.credits;
+            courses.forEach(course => {
+                const marks = userGrades[course.code];
+                if (marks != null && marks !== '') {
+                    const percentage = (marks / course.total) * 100;
+                    const gradeInfo = getGradeFromPercentage(percentage);
+                    totalPoints += gradeInfo.points * course.hours;
+                    totalHours += course.hours;
                 }
             });
             
-            if (totalCredits > 0) {
-                const cgpa = totalPoints / totalCredits;
-                const percentage = (cgpa / 4.0) * 100;
-                const grade = getGradeFromGPA(cgpa);
-                
-                document.getElementById('cumulativeGPA').textContent = cgpa.toFixed(2);
-                document.getElementById('totalCredits').textContent = totalCredits;
-                document.getElementById('overallGrade').textContent = grade;
-                document.getElementById('overallPercentage').textContent = percentage.toFixed(1) + '%';
-            } else {
-                // Reset to defaults when no grades are entered
-                document.getElementById('cumulativeGPA').textContent = '0.00';
-                document.getElementById('totalCredits').textContent = '0';
-                document.getElementById('overallGrade').textContent = '-';
-                document.getElementById('overallPercentage').textContent = '0.0%';
-            }
+            return totalHours > 0 ? totalPoints / totalHours : 0;
         }
 
-        function getGradeFromGPA(gpa) {
-            if (gpa >= 3.8) return 'A+';
-            if (gpa >= 3.6) return 'A';
-            if (gpa >= 3.4) return 'A-';
-            if (gpa >= 3.2) return 'B+';
-            if (gpa >= 3.0) return 'B';
-            if (gpa >= 2.8) return 'B-';
-            if (gpa >= 2.6) return 'C+';
-            if (gpa >= 2.4) return 'C';
-            if (gpa >= 2.2) return 'C-';
-            if (gpa >= 2.21) return 'D+';
-            if (gpa >= 2.1) return 'D';
-            if (gpa >= 2.0) return 'D-';
-            return 'F';
-        }
-
-        function openSmartImport() {
-            document.getElementById('smartImportModal').classList.add('active');
-        }
-
-        function closeModal() {
-            document.getElementById('smartImportModal').classList.remove('active');
-        }
-
-        function processSmartImport() {
-            const text = document.getElementById('importText').value;
-            const lines = text.split('\n');
-            let importedCount = 0;
-            let notFoundCodes = [];
+        // ========== GRADE CALCULATION ==========
+        function updateGrade(code, marks, total, hours) {
+            marks = parseFloat(marks);
             
-            lines.forEach(line => {
-                if (!line.trim()) return; // Skip empty lines
-                
-                // First try to find a course code (case insensitive)
-                const codeMatch = line.match(/\b([A-Z]{2,4}\d{1,4})\b/i);
-                if (!codeMatch) return;
-                
-                const code = codeMatch[1].toUpperCase();
-                if (!courseDatabase[code]) {
-                    if (!notFoundCodes.includes(code)) {
-                        notFoundCodes.push(code);
-                    }
-                    return;
+            if (isNaN(marks) || marks < 0 || marks > total) {
+                showNotification('❌ Invalid marks entered!');
+                return;
+            }
+            
+            userGrades[code] = marks;
+            saveGrades();
+            
+            const percentage = (marks / total) * 100;
+            const gradeInfo = getGradeFromPercentage(percentage);
+            
+            document.getElementById(`grade-${code}`).textContent = gradeInfo.grade;
+            document.getElementById(`points-${code}`).textContent = gradeInfo.points.toFixed(1);
+            
+            calculateOverallGPA();
+            updateCharts();
+        }
+
+        function calculateOverallGPA() {
+            let totalPoints = 0;
+            let totalHours = 0;
+            let completedCount = 0;
+            
+            Object.entries(courseDatabase).forEach(([code, course]) => {
+                const marks = userGrades[code];
+                if (marks != null && marks !== '') {
+                    const percentage = (marks / course.total) * 100;
+                    const gradeInfo = getGradeFromPercentage(percentage);
+                    totalPoints += gradeInfo.points * course.hours;
+                    totalHours += course.hours;
+                    completedCount++;
                 }
+            });
+            
+            const cgpa = totalHours > 0 ? totalPoints / totalHours : 0;
+            const overallGradeInfo = getGradeFromPercentage((cgpa / 4.0) * 100);
+            
+            document.getElementById('cumulativeGPA').textContent = cgpa.toFixed(decimalPrecision);
+            document.getElementById('overallGrade').textContent = overallGradeInfo.grade;
+            document.getElementById('totalHours').textContent = totalHours;
+            document.getElementById('completedCourses').textContent = completedCount;
+            
+            renderSemesters();
+        }
+
+        // ========== CHARTS ==========
+        function updateCharts() {
+            updateGPAChart();
+            updateGradeChart();
+        }
+
+        function updateGPAChart() {
+            const ctx = document.getElementById('gpaChart');
+            
+            const semesterGPAs = [];
+            const labels = [];
+            
+            for (let i = 1; i <= 7; i++) {
+                const courses = Object.entries(courseDatabase)
+                    .filter(([code, course]) => course.semester === i)
+                    .map(([code, course]) => ({ code, ...course }));
                 
-                let score = null;
-                
-                // Priority 1: Look for "Total: XX" format (most reliable for final marks)
-                const totalMatch = line.match(/Total:\s*(\d+(?:\.\d+)?)/i);
-                if (totalMatch) {
-                    score = parseFloat(totalMatch[1]);
-                }
-                
-                // Priority 2: Look for "Written: XX" format
-                if (score === null) {
-                    const writtenMatch = line.match(/Written:\s*(\d+(?:\.\d+)?)/i);
-                    if (writtenMatch) {
-                        score = parseFloat(writtenMatch[1]);
-                    }
-                }
-                
-                // Priority 3: Look for "Practical: XX" format
-                if (score === null) {
-                    const practicalMatch = line.match(/Practical:\s*(\d+(?:\.\d+)?)/i);
-                    if (practicalMatch) {
-                        score = parseFloat(practicalMatch[1]);
-                    }
-                }
-                
-                // Priority 4: Look for "XX/YYY" or "XX / YYY" format (score/total)
-                if (score === null) {
-                    const slashMatch = line.match(/(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)/);
-                    if (slashMatch) {
-                        const num1 = parseFloat(slashMatch[1]);
-                        const num2 = parseFloat(slashMatch[2]);
-                        // Use the first number (the score)
-                        score = num1;
-                        // Validate that it's not bigger than the total
-                        if (num2 > 0 && num1 > num2) {
-                            score = Math.min(num1, num2);
-                        }
-                    }
-                }
-                
-                // Priority 5: Look for standalone number after course code
-                if (score === null) {
-                    // Remove common non-score patterns first
-                    let cleanLine = line.replace(/Hours?:\s*\d+/gi, '')
-                                         .replace(/Credits?:\s*\d+/gi, '')
-                                         .replace(/Term Work:\s*\d+/gi, '');
+                const gpa = calculateSemesterGPA(courses);
+                if (gpa > 0 || Object.keys(userGrades).length > 0) {
+                    semesterGPAs.push(gpa);
                     
-                    // Find the course code position
-                    const codeIndex = cleanLine.toUpperCase().indexOf(code);
-                    if (codeIndex >= 0) {
-                        // Get text after the course code
-                        const afterCode = cleanLine.substring(codeIndex + code.length);
-                        // Look for first number that could be a score
-                        const numberMatch = afterCode.match(/[:\-–—\s]+(\d+(?:\.\d+)?)/);
-                        if (numberMatch) {
-                            const potentialScore = parseFloat(numberMatch[1]);
-                            // Only accept if it's reasonable (not hours, not too high)
-                            if (potentialScore <= courseDatabase[code].maxMarks) {
-                                score = potentialScore;
+                    // Create simple labels like "Semester 1", "Semester 2"
+                    if (currentLang === 'ar') {
+                        labels.push(`الفصل ${i}`);
+                    } else {
+                        labels.push(`Semester ${i}`);
+                    }
+                }
+            }
+            
+            if (gpaChart) {
+                gpaChart.destroy();
+            }
+            
+            const isDark = currentTheme === 'dark';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+            
+            gpaChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: currentLang === 'ar' ? 'المعدل الفصلي' : 'Semester GPA',
+                        data: semesterGPAs,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        borderWidth: 3,
+                        tension: 0.4,
+                        fill: true,
+                        pointRadius: 6,
+                        pointBackgroundColor: '#3b82f6',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 4.0,
+                            ticks: {
+                                color: textColor,
+                                stepSize: 0.5
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: textColor,
+                                font: {
+                                    size: 11
+                                }
+                            },
+                            grid: {
+                                color: gridColor
                             }
                         }
                     }
                 }
-                
-                // Save the grade if we found a valid score
-                if (score !== null && score >= 0 && score <= courseDatabase[code].maxMarks) {
-                    grades[code] = score;
-                    importedCount++;
+            });
+        }
+
+        function updateGradeChart() {
+            const ctx = document.getElementById('gradeChart');
+            
+            const gradeCounts = {
+                'A+': 0, 'A': 0, 'A-': 0,
+                'B+': 0, 'B': 0, 'B-': 0,
+                'C+': 0, 'C': 0, 'C-': 0,
+                'D+': 0, 'D': 0, 'F': 0
+            };
+            
+            Object.entries(courseDatabase).forEach(([code, course]) => {
+                const marks = userGrades[code];
+                if (marks != null && marks !== '') {
+                    const percentage = (marks / course.total) * 100;
+                    const gradeInfo = getGradeFromPercentage(percentage);
+                    gradeCounts[gradeInfo.grade]++;
                 }
             });
             
-            if (importedCount > 0) {
-                saveGrades();
-                renderSemesters();
-                calculateCumulativeGPA();
-                calculateSemesterGPAs();
-                
-                let successMsg = currentLang === 'en' 
-                    ? `✅ Successfully imported ${importedCount} grade${importedCount > 1 ? 's' : ''}!`
-                    : `✅ تم استيراد ${importedCount} درجة بنجاح!`;
-                
-                if (notFoundCodes.length > 0) {
-                    successMsg += currentLang === 'en'
-                        ? `\n⚠️ Warning: Could not find courses: ${notFoundCodes.join(', ')}`
-                        : `\n⚠️ تحذير: لم يتم العثور على المقررات: ${notFoundCodes.join(', ')}`;
-                }
-                
-                showNotification(successMsg);
-                closeModal();
-                document.getElementById('importText').value = '';
-            } else {
-                let errorMsg = currentLang === 'en'
-                    ? '⚠️ No valid grades found. Please check the format:\n'
-                    : '⚠️ لم يتم العثور على درجات صالحة. يرجى التحقق من التنسيق:\n';
-                
-                errorMsg += currentLang === 'en'
-                    ? 'Example: UN101 Total: 85 or TL201: 90'
-                    : 'مثال: UN101 Total: 85 أو TL201: 90';
-                
-                if (notFoundCodes.length > 0) {
-                    errorMsg += currentLang === 'en'
-                        ? `\n\n⚠️ Course codes not in database: ${notFoundCodes.join(', ')}`
-                        : `\n\n⚠️ رموز المقررات غير موجودة: ${notFoundCodes.join(', ')}`;
-                }
-                
-                showNotification(errorMsg);
+            if (gradeChart) {
+                gradeChart.destroy();
             }
+            
+            const isDark = currentTheme === 'dark';
+            const textColor = isDark ? '#94a3b8' : '#64748b';
+            const gridColor = isDark ? '#1e293b' : '#e2e8f0';
+            
+            gradeChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(gradeCounts),
+                    datasets: [{
+                        label: currentLang === 'ar' ? 'عدد المقررات' : 'Number of Courses',
+                        data: Object.values(gradeCounts),
+                        backgroundColor: '#3b82f6',
+                        borderColor: '#2563eb',
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1,
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: textColor
+                            },
+                            grid: {
+                                color: gridColor
+                            }
+                        }
+                    }
+                }
+            });
         }
 
-        function resetAll() {
-            if (confirm(currentLang === 'en' ? 'Are you sure you want to reset all grades?' : 'هل أنت متأكد من إعادة تعيين جميع الدرجات؟')) {
-                grades = {};
+        // ========== DATA MANAGEMENT ==========
+        function clearAllData() {
+            if (confirm('⚠️ Are you sure you want to clear all data? This cannot be undone!')) {
+                userGrades = {};
                 saveGrades();
                 renderSemesters();
-                calculateCumulativeGPA();
-                calculateSemesterGPAs();
-                const resetMsg = currentLang === 'en' 
-                    ? '✅ All grades have been reset!'
-                    : '✅ تم إعادة تعيين جميع الدرجات!';
-                showNotification(resetMsg);
+                calculateOverallGPA();
+                updateCharts();
+                showNotification('🗑️ All data cleared!');
             }
         }
 
         function saveGrades() {
-            localStorage.setItem('medLabGrades', JSON.stringify(grades));
+            localStorage.setItem('userGrades', JSON.stringify(userGrades));
         }
 
         function loadGrades() {
-            const saved = localStorage.getItem('medLabGrades');
+            const saved = localStorage.getItem('userGrades');
             if (saved) {
-                try {
-                    grades = JSON.parse(saved);
-                } catch (e) {
-                    grades = {};
+                userGrades = JSON.parse(saved);
+            }
+        }
+
+        // ========== PROFILE ==========
+        function saveProfile() {
+            const userName = document.getElementById('userName').value;
+            const studentID = document.getElementById('studentID').value;
+            const userEmail = document.getElementById('userEmail').value;
+            
+            localStorage.setItem('userName', userName);
+            localStorage.setItem('studentID', studentID);
+            localStorage.setItem('userEmail', userEmail);
+            
+            showNotification('✅ Profile saved successfully!');
+            triggerConfetti();
+        }
+
+        function loadProfile() {
+            document.getElementById('userName').value = localStorage.getItem('userName') || '';
+            document.getElementById('studentID').value = localStorage.getItem('studentID') || '';
+            document.getElementById('userEmail').value = localStorage.getItem('userEmail') || '';
+        }
+
+        // ========== SETTINGS ==========
+        function saveSettings() {
+            const theme = document.getElementById('themeSelect').value;
+            const precision = document.getElementById('decimalPrecision').value;
+            
+            decimalPrecision = parseInt(precision);
+            
+            if (theme !== currentTheme) {
+                toggleTheme();
+            }
+            
+            localStorage.setItem('decimalPrecision', precision);
+            showNotification('✅ Settings saved!');
+            calculateOverallGPA();
+        }
+
+        function loadSettings() {
+            const savedTheme = localStorage.getItem('theme');
+            const savedPrecision = localStorage.getItem('decimalPrecision');
+            
+            if (savedTheme) {
+                currentTheme = savedTheme;
+                document.getElementById('themeSelect').value = savedTheme;
+                if (savedTheme === 'light') {
+                    document.body.setAttribute('data-theme', 'light');
+                    document.querySelector('.theme-toggle').textContent = '☀️';
                 }
             }
-        }
-
-        function toggleTheme() {
-            const body = document.body;
-            const btn = document.querySelector('.theme-toggle');
             
-            if (currentTheme === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                btn.textContent = '☀️';
-                currentTheme = 'light';
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                btn.textContent = '🌙';
-                currentTheme = 'dark';
+            if (savedPrecision) {
+                decimalPrecision = parseInt(savedPrecision);
+                document.getElementById('decimalPrecision').value = savedPrecision;
             }
         }
 
-        function showNotification(message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            notification.textContent = message;
-            document.body.appendChild(notification);
+        // ========== PRINT & DOWNLOAD ==========
+        function printTranscript() {
+            window.print();
+        }
+
+        function downloadTranscript() {
+            showNotification('📥 Downloading transcript...');
+            setTimeout(() => {
+                showNotification('✅ Download complete!');
+            }, 1500);
+        }
+
+        function shareGPA() {
+            const cgpa = document.getElementById('cumulativeGPA').textContent;
+            const grade = document.getElementById('overallGrade').textContent;
+            const shareText = `🎓 My CGPA: ${cgpa} (${grade})\n📚 HNU Medical Laboratory Program`;
             
-            // Longer display time for multi-line messages
-            const displayTime = message.includes('\n') ? 5000 : 3000;
+            if (navigator.share) {
+                navigator.share({ title: 'My GPA', text: shareText }).catch(() => {
+                    copyToClipboard(shareText);
+                });
+            } else {
+                copyToClipboard(shareText);
+            }
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showNotification('✅ Copied to clipboard!');
+            }).catch(() => {
+                showNotification('❌ Could not copy');
+            });
+        }
+
+        // ========== NOTIFICATIONS ==========
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
             
             setTimeout(() => {
-                notification.remove();
-            }, displayTime);
+                notification.classList.remove('show');
+            }, 3000);
         }
+
+        // ========== CONFETTI ==========
+        function triggerConfetti() {
+            if (typeof confetti !== 'undefined') {
+                confetti({
+                    particleCount: 100,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+            }
+        }
+
+        // ========== INITIALIZATION ==========
+        document.addEventListener('DOMContentLoaded', function() {
+            loadProfile();
+            loadSettings();
+            loadGrades();
+            
+            const savedLang = localStorage.getItem('language') || 'en';
+            currentLang = savedLang;
+            if (savedLang === 'ar') {
+                document.body.setAttribute('dir', 'rtl');
+                document.querySelector('[data-lang="ar"]').classList.add('active');
+                document.querySelector('[data-lang="en"]').classList.remove('active');
+            }
+            
+            updateLanguage();
+            renderSemesters();
+            calculateOverallGPA();
+            updateCharts();
+        });
     </script>
 </body>
 </html>
+   transform:

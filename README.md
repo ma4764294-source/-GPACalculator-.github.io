@@ -66,17 +66,7 @@
             font-size: 16px;
         }
 
-        @media (max-width: 768px) {
-            html {
-                font-size: 14px;
-            }
-        }
 
-        @media (max-width: 480px) {
-            html {
-                font-size: 13px;
-            }
-        }
 
         body {
             font-family: 'Rajdhani', 'Inter', sans-serif;
@@ -574,7 +564,7 @@
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
+            gap: 1rem;
             margin-bottom: 1.5rem;
         }
 
@@ -679,7 +669,7 @@
         /* ========== QUICK ACTIONS ========== */
         .quick-actions {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: repeat(2, 1fr);
             gap: 0.75rem;
             margin-bottom: 1.5rem;
         }
@@ -736,7 +726,6 @@
                 box-shadow: 0 8px 20px var(--glow-blue);
             }
         }
-
         .action-btn.import-special {
             background: linear-gradient(135deg, #ff4757 0%, #ff6348 100%);
             color: white;
@@ -746,12 +735,10 @@
             box-shadow: 0 4px 15px rgba(255, 71, 87, 0.4);
         }
 
-        @media (hover: hover) {
-            .action-btn.import-special:hover {
-                background: linear-gradient(135deg, #ff6348 0%, #ff4757 100%);
-                transform: scale(1.03);
-                box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
-            }
+        .action-btn.import-special:hover {
+            background: linear-gradient(135deg, #ff6348 0%, #ff4757 100%);
+            transform: scale(1.03);
+            box-shadow: 0 6px 20px rgba(255, 71, 87, 0.5);
         }
 
         .action-btn.download {
@@ -760,11 +747,9 @@
             border-color: var(--accent);
         }
 
-        @media (hover: hover) {
-            .action-btn.download:hover {
-                transform: scale(1.08);
-                box-shadow: 0 8px 30px var(--glow-blue);
-            }
+        .action-btn.download:hover {
+            transform: scale(1.08);
+            box-shadow: 0 8px 30px var(--glow-blue);
         }
 
         /* ========== SEMESTER CARDS ========== */
@@ -788,11 +773,9 @@
             margin-bottom: 0.5rem;
         }
 
-        @media (hover: hover) {
-            .semester-header:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 16px var(--shadow);
-            }
+        .semester-header:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px var(--shadow);
         }
 
         .semester-stats {
@@ -1162,76 +1145,309 @@
         /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
             .container {
-                padding: 0 0.5rem;
+                padding: 0 0.6rem;
+                margin-top: 62px;
+            }
+
+            .hero-section {
+                padding: 1.1rem 0.75rem;
+                border-radius: 14px;
+                margin-bottom: 1rem;
             }
 
             .hero-section h1 {
-                font-size: 1.8rem;
+                font-size: 1.4rem;
+                margin-bottom: 0.3rem;
             }
 
             .developer-credit {
-                font-size: 1rem;
+                font-size: 0.85rem;
             }
 
+            /* 2x2 grid on phone */
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+                margin-bottom: 1rem;
+            }
+
+            .stat-card {
+                padding: 0.75rem 0.5rem;
+                border-radius: 10px;
+            }
+
+            .stat-label {
+                font-size: 0.65rem;
+                letter-spacing: 0.5px;
+                margin-bottom: 0.3rem;
+            }
+
+            .stat-value {
+                font-size: 1.5rem;
+            }
+
+            .stat-subtext {
+                font-size: 0.7rem;
+                margin-top: 0.15rem;
+            }
+
+            /* 2x2 grid on phone */
             .quick-actions {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.6rem;
+                margin-bottom: 1rem;
             }
 
+            .action-btn {
+                padding: 0.7rem 0.5rem;
+                font-size: 0.78rem;
+                min-height: 48px;
+                border-radius: 10px;
+                gap: 0.3rem;
+            }
+
+            /* Keep marks inputs side by side */
             .marks-input-group {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
+                gap: 0.6rem;
             }
 
+            .input-wrapper input {
+                padding: 0.6rem 0.5rem;
+                font-size: 1rem;
+                border-radius: 8px;
+            }
+
+            .input-wrapper label {
+                font-size: 0.72rem;
+            }
+
+            /* Keep grade display as 3-column row */
             .grade-display {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 0.4rem;
+                padding: 0.6rem 0.4rem;
+                border-radius: 8px;
+            }
+
+            .grade-item {
+                padding: 0.3rem 0.1rem;
+            }
+
+            .grade-item label {
+                font-size: 0.65rem;
+            }
+
+            .grade-item strong {
+                font-size: 0.95rem;
+            }
+
+            /* Charts */
+            .chart-container {
+                padding: 1rem 0.6rem;
+                border-radius: 12px;
+                margin-bottom: 1rem;
+            }
+
+            .chart-container h3 {
+                font-size: 0.95rem;
+                margin-bottom: 0.75rem;
             }
 
             .chart-wrapper {
-                height: 250px;
+                height: 220px;
             }
 
+            /* Semester header stays as row on phone */
             .semester-header {
-                flex-direction: column;
-                gap: 1rem;
-                text-align: center;
+                padding: 0.8rem 0.75rem;
+                border-radius: 12px;
+                font-size: 0.95rem;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .semester-header span:first-child {
+                flex: 1;
+                font-size: 0.88rem;
+                line-height: 1.3;
             }
 
             .semester-stats {
-                width: 100%;
-                justify-content: space-around;
-                gap: 1rem;
+                gap: 0.6rem;
+                flex-shrink: 0;
             }
 
-            .semester-stat-item {
+            .semester-stat-label {
+                font-size: 0.6rem;
+            }
+
+            .semester-stat-value {
+                font-size: 0.82rem;
+            }
+
+            .toggle-icon {
+                font-size: 1rem;
+            }
+
+            /* Semester body */
+            .semester-body {
+                padding: 0.75rem 0.6rem;
+                border-radius: 12px;
+            }
+
+            .semester-body.collapsed {
+                padding: 0 0.6rem;
+            }
+
+            /* Course rows */
+            .course-row {
+                padding: 0.75rem 0.6rem;
+                border-radius: 10px;
+                margin-bottom: 0.6rem;
+            }
+
+            .course-header {
+                margin-bottom: 0.6rem;
+                gap: 0.3rem;
+            }
+
+            .course-code {
+                font-size: 0.9rem;
+            }
+
+            .course-name {
+                font-size: 0.78rem;
+            }
+
+            .course-meta {
+                font-size: 0.72rem;
+                gap: 0.6rem;
+            }
+
+            /* Top nav */
+            .top-nav {
+                height: 54px;
+                padding: 0 0.5rem;
+            }
+
+            .greeting {
+                font-size: 0.68rem;
+                max-width: 100px;
+            }
+
+            .theme-toggle,
+            .menu-toggle {
+                width: 36px;
+                height: 36px;
+            }
+
+            .theme-toggle {
+                font-size: 0.95rem;
+            }
+
+            .menu-toggle span {
+                width: 18px;
+                height: 2px;
+            }
+
+            .lang-btn {
+                padding: 0.25rem 0.4rem;
+                font-size: 0.65rem;
+                min-width: 38px;
+                min-height: 32px;
+            }
+
+            .language-switcher {
+                padding: 0.2rem;
+                border-radius: 8px;
+            }
+
+            /* Notification — stay inside screen */
+            .notification {
+                top: 64px;
+                right: 0.5rem;
+                left: 0.5rem;
+                max-width: none;
+                transform: translateY(-120px);
+                font-size: 0.82rem;
+                padding: 0.7rem 1rem;
+                border-radius: 10px;
+            }
+
+            .notification.show {
+                transform: translateY(0);
+            }
+
+            /* Modal */
+            .modal-content {
+                padding: 1.25rem 1rem;
+                border-radius: 16px;
+            }
+
+            .modal-header h2 {
+                font-size: 1.1rem;
+            }
+
+            .import-textarea {
+                min-height: 160px;
+                font-size: 0.85rem;
+                padding: 0.75rem;
+            }
+
+            .import-info {
+                font-size: 0.78rem;
+                padding: 0.7rem;
+            }
+
+            /* Side menu */
+            .side-menu {
+                top: 54px;
+                height: calc(100vh - 54px);
+                width: 80%;
+            }
+
+            .menu-section {
+                padding: 0.85rem;
+            }
+
+            .menu-item {
+                padding: 0.65rem 0.7rem;
+                min-height: 44px;
                 font-size: 0.85rem;
             }
+
+            .form-group {
+                margin-bottom: 0.7rem;
+            }
+
+            .form-group label {
+                font-size: 0.78rem;
+            }
+
+            .form-group input,
+            .form-group select {
+                padding: 0.65rem 0.7rem;
+                font-size: 1rem;
+                border-radius: 8px;
+            }
+
+            .save-btn {
+                padding: 0.7rem;
+                font-size: 0.9rem;
+            }
+
+            /* iOS input zoom prevention */
+            input[type="number"]:focus,
+            input[type="text"]:focus,
+            input[type="email"]:focus,
+            select:focus,
+            textarea:focus {
+                font-size: 16px !important;
+            }
         }
 
-        /* ========== UTILITY CLASSES ========== */
-        .hidden {
-            display: none !important;
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .mb-1 { margin-bottom: 1rem; }
-        .mb-2 { margin-bottom: 2rem; }
-        .mt-1 { margin-top: 1rem; }
-        .mt-2 { margin-top: 2rem; }
-
-        /* ========== ADDITIONAL MOBILE RESPONSIVE STYLES ========== */
-
-        /* Input fields - touch-friendly (prevents iOS zoom) */
-        input[type="number"],
-        input[type="text"],
-        input[type="email"],
-        select {
-            min-height: 48px !important;
-            font-size: 16px !important;
-        }
-
-        /* Menu overlay backdrop */
+        /* ========== MENU OVERLAY ========== */
         .menu-overlay {
             position: fixed;
             top: 0;
@@ -1250,37 +1466,29 @@
             pointer-events: all;
         }
 
-        /* Prevent double-tap zoom on iOS */
-        * {
-            touch-action: manipulation;
-        }
-
-        /* Improve touch target appearance */
+        /* Touch optimizations */
+        * { touch-action: manipulation; }
         input, button, select, textarea {
             -webkit-appearance: none;
             appearance: none;
         }
 
-        /* Fix iOS input zoom on focus */
-        @media screen and (max-width: 767px) {
-            input[type="number"]:focus,
-            input[type="text"]:focus,
-            input[type="email"]:focus,
-            select:focus,
-            textarea:focus {
-                font-size: 16px !important;
-            }
+        /* ========== UTILITY CLASSES ========== */
+        .hidden {
+            display: none !important;
         }
 
-        /* Notification: center on small screens */
-        @media (max-width: 480px) {
-            .notification {
-                right: 5%;
-                left: 5%;
-                max-width: 90%;
-            }
+        .text-center {
+            text-align: center;
         }
+
+        .mb-1 { margin-bottom: 1rem; }
+        .mb-2 { margin-bottom: 2rem; }
+        .mt-1 { margin-top: 1rem; }
+        .mt-2 { margin-top: 2rem; }
+        /* ========== ADDITIONAL MOBILE RESPONSIVE STYLES ========== */
     </style>
+
 </head>
 <body>
     <!-- Menu Overlay -->
@@ -2403,4 +2611,4 @@
         });
     </script>
 </body>
-</html>
+</html>      
